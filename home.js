@@ -1,75 +1,112 @@
 const plane = document.getElementById('draggablePlane');
 const intro = document.getElementById('intro-screen');
 const site = document.getElementById('main-site');
+let isDragging = false;
+let startY = 0;
 let isLaunched = false;
 
-// --- GESTION DU DÉCOLLAGE ---
-plane.addEventListener('mousedown', (e) => {
-    let startY = e.clientY;
-    function onMouseMove(event) {
-        let deltaY = event.clientY - startY;
-        if (deltaY < -100 && !isLaunched) {
+// --- 1. GESTION DU DÉCOLLAGE ---
+
+const handleStart = (e) => {
+    if (isLaunched) return;
+    isDragging = true;
+    startY = e.clientY || e.touches[0].clientY;
+    plane.style.transition = "none";
+};
+
+const handleMove = (e) => {
+    if (!isDragging || isLaunched) return;
+    const currentY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+    const deltaY = currentY - startY;
+
+    if (deltaY < 0) {
+        const scale = 1 + Math.abs(deltaY) / 500;
+        plane.style.transform = `translateY(${deltaY}px) scale(${scale})`;
+        if (deltaY < -180) {
             launch();
-            window.removeEventListener('mousemove', onMouseMove);
         }
     }
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', () => window.removeEventListener('mousemove', onMouseMove));
-});
+};
+
+const handleEnd = () => {
+    if (!isDragging || isLaunched) return;
+    isDragging = false;
+    plane.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+    plane.style.transform = `translateY(0px) scale(1)`;
+};
 
 function launch() {
     isLaunched = true;
+    isDragging = false;
+    
+    // Animation de l'avion
+    plane.style.transition = "transform 0.6s ease-in";
+    plane.style.transform = "translateY(-1000px) scale(2.5)";
+    
+    // Le rideau bleu monte
     intro.style.transform = 'translateY(-100%)';
+    
+    // --- CORRECTION DU SCROLL ---
+    // On débloque TOUT : body et html
+    document.body.style.overflowY = 'auto';
+    document.documentElement.style.overflowY = 'auto'; 
+    document.body.style.height = 'auto';
+    
+    // On affiche le site
     site.style.opacity = '1';
-    // On autorise le scroll une fois le site lancé
-    document.body.style.overflowY = 'auto'; 
+
+    // Après l'animation (800ms), on retire l'intro du flux pour être sûr
+    setTimeout(() => {
+        intro.style.display = 'none';
+    }, 800);
+
+    initCounterObserver();
 }
 
-// --- GESTION DES COMPTEURS AU SCROLL ---
-const startCounters = (el) => {
-    const target = parseInt(el.getAttribute('data-target'));
-    const duration = 2000; // Animation de 2 secondes
-    const stepTime = 20;
-    const steps = duration / stepTime;
-    const increment = target / steps;
-    let current = 0;
+// Événements
+plane.addEventListener('mousedown', handleStart);
+window.addEventListener('mousemove', handleMove);
+window.addEventListener('mouseup', handleEnd);
+plane.addEventListener('touchstart', handleStart);
+window.addEventListener('touchmove', handleMove);
+window.addEventListener('touchend', handleEnd);
 
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            el.innerText = target.toLocaleString();
-            clearInterval(timer);
+// --- 2. GESTION DES CHIFFRES ---
+
+function initCounterObserver() {
+    const statsSection = document.querySelector('.stats-container');
+    if(!statsSection) return;
+
+    const observerOptions = { threshold: 0.2 };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counters = entry.target.querySelectorAll('.counter');
+                counters.forEach(counter => animateValue(counter));
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    observer.observe(statsSection);
+}
+
+function animateValue(obj) {
+    const target = parseInt(obj.getAttribute('data-target'));
+    const duration = 2500;
+    let startTimestamp = null;
+    
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const currentValue = Math.floor(progress * target);
+        obj.innerHTML = currentValue.toLocaleString();
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
         } else {
-            el.innerText = Math.floor(current).toLocaleString();
+            obj.innerHTML = target.toLocaleString();
         }
-    }, stepTime);
-};
-
-// L'observateur qui regarde si la section est visible
-const observerOptions = {
-    threshold: 0.5 // Déclenche quand 50% de l'élément est visible
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            // On récupère TOUS les compteurs et on les lance
-            const counters = document.querySelectorAll('.counter');
-            counters.forEach(counter => startCounters(counter));
-            // On arrête d'observer une fois l'animation lancée
-            observer.unobserve(entry.target);
-        }
-    });
-}, observerOptions);
-
-// On cible la boîte qui contient les stats
-const statsSection = document.querySelector('.stats-container');
-observer.observe(statsSection);
-
-// Support Tactile
-plane.addEventListener('touchstart', (e) => {
-    let startY = e.touches[0].clientY;
-    plane.addEventListener('touchmove', (me) => {
-        if (me.touches[0].clientY - startY < -70) launch();
-    });
-});
+    };
+    window.requestAnimationFrame(step);
+}
