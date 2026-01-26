@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECHNOLOGIE T-CAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+    <div id="intro-screen">
+        <div class="plane-wrapper" id="draggablePlane">
+            <svg class="plane-icon" viewBox="0 0 24 24">
+                <path d="M21,16L22,13L15,10V3.5A1.5,1.5 0 0,0 13.5,2A1.5,1.5 0 0,0 12,3.5V10L5,13L6,16L13,14V18.5L11,20V22L13.5,21L16,22V20L14,18.5V14L21,16Z" />
+            </svg>
+        </div>
+        <p class="instruction-text">GLISSEZ L'AVION VERS LE HAUT POUR DÉCOLLER</p>
+    </div>
+
+    <div id="main-site">
+        <header>
+            <div class="title">TECHNOLOGIE : T-CAS</div>
+            <nav>
+                <a href="#">HISTOIRE</a>
+                <a href="#">TECHNOLOGIE</a>
+                <a href="#">SIMULATEUR</a>
+            </nav>
+        </header>
+
+        <div class="content">
+            <div class="definition-box">
+                <h2>Qu'est-ce que le T-CAS ?</h2>
+                <p>Le <strong>Traffic alert and collision avoidance system</strong> est un système électronique de pointe. Ce site explique comment le T-CAS surveille le ciel et son utilité vitale pour la sécurité aérienne.</p>
+                <p><em>Objectif : Prévoir les trajectoires et empêcher les collisions en vol.</em></p>
+            </div>
+
+            <div class="radar-view">
+                <div class="own-ship-radar"></div>
+
+                <div class="zone zone-ta">
+                    <div class="msg">Alerte : "Traffic, Traffic"</div>
+                    <div class="label" style="color:#b48b02">Zone TA (Jaune)</div>
+                </div>
+
+                <div class="zone zone-ra">
+                    <div class="msg">Consigne : "Climb" / "Descend"</div>
+                    <div class="label" style="color:#c2410c">Zone RA (Orange)</div>
+                </div>
+
+                <div class="zone zone-collision">
+                    <div class="msg">CRITIQUE : Pilote Automatique</div>
+                    <div class="label" style="color:#b91c1c; padding-bottom:10px;">Collision (Rouge)</div>
+                </div>
+            </div>
+
+            <a href="#" class="btn-tech">EN SAVOIR PLUS SUR LA TECHNOLOGIE</a>
+
+            <div class="stats-container">
+                <div class="stat-item">
+                    <h3 class="counter" data-target="25000">0</h3>
+                    <p>Avions équipés</p>
+                </div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="1981">0</h3>
+                    <p>Année de création</p>
+                </div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="1500">0</h3>
+                    <p>Accidents évités / an</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+</html>
