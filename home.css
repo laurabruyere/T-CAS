@@ -107,3 +107,257 @@ body {
 .stats-container {
     margin-top: 100px; /* Espace pour forcer l'utilisateur à scroller */
 }
+
+
+/* --- Styles spécifiques à la page Histoire --- */
+
+.hero-section {
+    margin-bottom: 60px;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--tech-blue);
+    margin-bottom: 10px;
+}
+
+/* Timeline Container */
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 0;
+}
+
+/* La ligne centrale */
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: var(--tech-blue);
+    top: 0; bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+    border-radius: 10px;
+    opacity: 0.2;
+}
+
+/* Items de la timeline */
+.timeline-item {
+    padding: 10px 40px;
+    position: relative;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.timeline-item.left { left: 0; text-align: right; }
+.timeline-item.right { left: 50%; text-align: left; }
+.timeline-item.focus { left: 25%; width: 50%; text-align: center; margin-top: 50px; }
+
+/* Bulles de contenu */
+.timeline-content {
+    padding: 25px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: translateY(-5px);
+}
+
+/* Tags de couleur */
+.tag {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+
+/*page histoire*/
+/* --- Styles spécifiques à la page Histoire --- */
+
+/* Hero Section - Gardée de la version précédente */
+.hero-section {
+    margin-bottom: 60px;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--tech-blue);
+    margin-bottom: 10px;
+}
+.hero-section p {
+    font-size: 1.2rem;
+    color: #475569;
+}
+
+
+/* Timeline Container */
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px 0;
+}
+
+/* La ligne centrale - Gardée de la version précédente */
+.timeline::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: var(--tech-blue);
+    top: 0; bottom: 0;
+    left: 50%;
+    margin-left: -2px;
+    border-radius: 10px;
+    opacity: 0.2;
+}
+
+/* Items de la timeline */
+.timeline-item {
+    padding: 10px 40px;
+    position: relative;
+    width: 50%;
+    box-sizing: border-box;
+    /* Ajustement des paddings pour laisser de la place au cercle et à la date */
+    padding-right: 60px; /* Espace pour le cercle + date à droite */
+    padding-left: 40px; /* Garde le padding initial à gauche */
+}
+
+.timeline-item.left {
+    left: 0;
+    text-align: right;
+    padding-left: 40px; /* Réinitialiser le padding gauche pour les éléments de gauche */
+    padding-right: 60px; /* Laisser de la place pour le point et la date à droite */
+}
+.timeline-item.right {
+    left: 50%;
+    text-align: left;
+    padding-left: 60px; /* Laisser de la place pour le point et la date à gauche */
+    padding-right: 40px; /* Réinitialiser le padding droit pour les éléments de droite */
+}
+.timeline-item.focus {
+    left: 25%;
+    width: 50%;
+    text-align: center;
+    margin-top: 50px;
+    padding-left: 20px; /* Ajuster un peu le padding pour le focus */
+    padding-right: 20px;
+}
+
+/* Bulles de contenu - Gardées de la version précédente */
+.timeline-content {
+    padding: 25px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+    height: auto; /* Important: Assure que la hauteur s'adapte au contenu */
+}
+
+.timeline-content:hover {
+    transform: translateY(-5px);
+}
+
+/* Nouveau style pour la date sur la timeline */
+.timeline-date {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); /* Centrage vertical */
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--tech-blue);
+    background-color: white; /* Pour contraster avec la ligne */
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1; /* Pour qu'il soit au-dessus de la ligne */
+    min-width: 80px; /* Pour une taille minimale */
+    text-align: center; /* Centrer le texte dans la bulle de date */
+}
+
+/* Positionnement des dates pour les éléments "left" et "right" */
+.timeline-item.left .timeline-date {
+    right: -100px; /* Déplacer plus à droite pour les items de gauche, hors du padding */
+}
+
+.timeline-item.right .timeline-date {
+    left: -100px; /* Déplacer plus à gauche pour les items de droite, hors du padding */
+}
+
+/* Les petits cercles sur la ligne */
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: var(--tech-blue);
+    border: 3px solid white; /* Petite bordure blanche */
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    z-index: 2; /* Au-dessus de la ligne */
+}
+
+.timeline-item.left::after {
+    right: -8px; /* Position sur la ligne centrale */
+}
+
+.timeline-item.right::after {
+    left: -8px; /* Position sur la ligne centrale */
+}
+
+/* Le "focus" n'a pas de cercle ni de date à côté, on le gère différemment */
+.timeline-item.focus::after {
+    display: none; /* Cacher le cercle pour le focus */
+}
+.timeline-item.focus .timeline-date {
+    position: static; /* Supprimer le positionnement absolu */
+    transform: none; /* Supprimer la transformation */
+    margin: 20px auto; /* Centrer la date et ajouter de l'espace */
+    display: block; /* Pour que margin auto fonctionne */
+    width: fit-content; /* Adapter la largeur au contenu */
+}
+
+/* Tags de couleur - Mise à jour et ajout du nouveau tag */
+.tag {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.tag-problem { background: rgba(231, 76, 60, 0.1); color: var(--collision-red); }
+.tag-solution { background: rgba(52, 152, 219, 0.1); color: var(--sky-blue); }
+.tag-mandatory { background: rgba(0, 128, 0, 0.1); color: green; } /* Nouveau tag pour "Obligatoire" */
+.tag-focus { background: var(--tech-blue); color: white; } /* Gardé tel quel */
+
+
+/* Bouton "En savoir plus" */
+.btn-tech {
+    background: var(--tech-blue);
+    color: white;
+    padding: 15px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    margin-top: 60px; /* Espace après la timeline */
+    display: inline-block; /* Pour centrer si besoin */
+    transition: background-color 0.3s ease;
+}
+.btn-tech:hover {
+    background-color: #1a2a6b; /* Un peu plus foncé au survol */
+}
+
+
+/*fin page histoire*/
