@@ -1,76 +1,4 @@
-:root {
-    --sky-blue: #1a2a44;       /* Bleu nuit pour l'intro */
-    --main-dark-blue: #0f172a; /* Fond profond du site */
-    --ta-yellow: #f1c40f;
-    --ra-orange: #e67e22;
-    --collision-red: #ef4444;
-    --tech-blue: #3b82f6;      /* Bleu néon pour les accents */
-    --glass-header: rgba(15, 23, 42, 0.9);
-    --glass-card: rgba(255, 255, 255, 0.03);
-}
-
-/* --- STRUCTURE GÉNÉRALE --- */
-body, html {
-    margin: 0;
-    padding: 0;
-    background-color: var(--main-dark-blue);
-    color: #f1f5f9;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    overflow-x: hidden;
-    /* Le scroll vertical est bloqué au début pour forcer l'intro */
-    overflow-y: hidden; 
-}
-
-/* --- ÉCRAN D'INTRO (FIXÉ) --- */
-#intro-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: var(--sky-blue);
-    background: radial-gradient(circle at center, #1e293b 0%, #111827 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1);
-}
-
-.plane-wrapper {
-    cursor: grab;
-    will-change: transform;
-    transition: transform 0.1s ease-out;
-}
-
-.plane-wrapper:active {
-    cursor: grabbing;
-}
-
-.plane-icon {
-    width: 130px;
-    fill: white;
-    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6));
-}
-
-.instruction-text {
-    color: white;
-    font-weight: 700;
-    margin-top: 30px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    opacity: 0.6;
-}
-
-/* --- SITE PRINCIPAL --- */
-#main-site {
-    opacity: 0;
-    transition: opacity 1s ease-in;
-    min-height: 200vh; /* Hauteur importante pour permettre le scroll */
-    background: linear-gradient(to bottom, #0f172a, #1e293b);
-}
+/* --- VARIABLES ET RESET --- */
 
 header {
     display: flex;
@@ -105,346 +33,207 @@ nav a:hover {
     color: var(--tech-blue);
 }
 
-.content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 60px 20px;
+:root {
+    --sky-blue: #1a2a44;       /* Bleu nuit profond */
+    --main-dark-blue: #0f172a; /* Fond du site */
+    --tech-blue: #3b82f6;      /* Bleu néon (accents) */
+    --collision-red: #ef4444;  /* Rouge alerte */
+    --glass-card: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-/* --- BLOC DÉFINITION --- */
-.definition-box {
-    max-width: 800px;
-    background: var(--glass-card);
-    padding: 40px;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 60px;
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-dark-blue);
+    color: #f1f5f9;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
     text-align: center;
-    backdrop-filter: blur(5px);
+    padding: 60px 20px 20px;
 }
 
-.definition-box h2 {
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 800;
     color: var(--tech-blue);
-    margin-top: 0;
-    font-size: 2rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
-.definition-box p {
-    line-height: 1.6;
-    font-size: 1.1rem;
+.hero-section p {
+    font-size: 1.2rem;
     color: #94a3b8;
 }
 
-/* --- RADAR SCHÉMA --- */
-.radar-view {
-    position: relative;
-    width: 550px;
-    height: 550px;
-    background: rgba(255, 255, 255, 0.01);
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 80px;
-    box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
-}
-
-.own-ship-radar {
-    width: 30px;
-    height: 30px;
-    background: white;
-    clip-path: polygon(50% 0%, 0% 100%, 50% 80%, 100% 100%);
-    z-index: 100;
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-}
-
-.zone {
-    position: absolute;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    cursor: help;
-}
-
-/* Z-INDEX : La plus petite zone (rouge) doit être au-dessus des autres */
-.zone-ta { width: 480px; height: 480px; border: 1.5px dashed var(--ta-yellow); background: rgba(241, 196, 15, 0.03); z-index: 10; }
-.zone-ra { width: 320px; height: 320px; border: 1.5px dashed var(--ra-orange); background: rgba(230, 126, 34, 0.06); z-index: 20; }
-.zone-collision { width: 150px; height: 150px; border: 2.5px solid var(--collision-red); background: rgba(239, 68, 68, 0.1); z-index: 30; }
-
-.zone:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-}
-
-.msg {
-    position: absolute;
-    top: -50px;
-    opacity: 0;
-    background: white;
-    color: var(--main-dark-blue);
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-weight: 800;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    transition: 0.3s;
-    pointer-events: none;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
-
-.zone:hover .msg {
-    opacity: 1;
-    transform: translateY(-5px);
-}
-
-.label {
-    font-size: 0.7rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    margin-top: auto;
-    padding-bottom: 20px;
-    letter-spacing: 1px;
-}
-
-/* --- BOUTON D'ACTION --- */
-.btn-tech {
-    background: var(--tech-blue);
-    color: white;
-    padding: 20px 45px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 800;
-    font-size: 1rem;
-    transition: 0.3s;
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-    margin-bottom: 100px;
-}
-
-.btn-tech:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 15px 35px rgba(59, 130, 246, 0.6);
-}/* --- Styles spécifiques à la page Histoire --- */
-
-.hero-section {
-    margin-bottom: 60px;
-}
-
-.hero-section h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--tech-blue);
-    margin-bottom: 10px;
-}
-
-/* Timeline Container */
+/* --- STRUCTURE DE LA TIMELINE --- */
 .timeline {
     position: relative;
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px 0;
+    max-width: 1100px; /* Un peu plus large pour laisser de la place */
+    margin: 60px auto;
+    padding: 40px 0;
 }
 
-/* La ligne centrale */
+/* La ligne centrale immobile */
 .timeline::after {
     content: '';
     position: absolute;
-    width: 4px;
-    background-color: var(--tech-blue);
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--tech-blue), transparent);
     top: 0; bottom: 0;
     left: 50%;
-    margin-left: -2px;
-    border-radius: 10px;
-    opacity: 0.2;
+    transform: translateX(-50%);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    z-index: 1;
 }
 
-/* Items de la timeline */
 .timeline-item {
-    padding: 10px 40px;
     position: relative;
     width: 50%;
+    margin-bottom: 40px; /* Espace entre les blocs */
+    display: flex;
     box-sizing: border-box;
+    z-index: 2;
 }
 
-.timeline-item.left { left: 0; text-align: right; }
-.timeline-item.right { left: 50%; text-align: left; }
-.timeline-item.focus { left: 25%; width: 50%; text-align: center; margin-top: 50px; }
+/* --- ALIGNEMENT ET ESPACE DE SÉCURITÉ --- */
+/* On utilise padding pour repousser les boites loin de la ligne centrale */
+.timeline-item.left { 
+    left: 0; 
+    justify-content: flex-end; 
+    padding-right: 120px; /* ESPACE CRUCIAL pour que la date ne touche pas le texte */
+}
 
-/* Bulles de contenu */
+.timeline-item.right { 
+    left: 50%; 
+    justify-content: flex-start; 
+    padding-left: 120px; /* ESPACE CRUCIAL pour que la date ne touche pas le texte */
+}
+
+/* --- LES CARTES (GLASSMORPHISM) --- */
 .timeline-content {
+    width: 100%;
+    max-width: 420px;
+    background: var(--glass-card);
+    backdrop-filter: blur(10px);
     padding: 25px;
-    background: white;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease;
-}
-
-.timeline-content:hover {
-    transform: translateY(-5px);
-}
-
-/* Tags de couleur */
-.tag {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 8px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    margin-bottom: 15px;
-}
-
-
-/*page histoire*/
-/* --- Styles spécifiques à la page Histoire --- */
-
-/* Hero Section - Gardée de la version précédente */
-.hero-section {
-    margin-bottom: 60px;
-}
-
-.hero-section h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--tech-blue);
-    margin-bottom: 10px;
-}
-.hero-section p {
-    font-size: 1.2rem;
-    color: #475569;
-}
-
-
-/* Timeline Container */
-.timeline {
+    border: 1px solid var(--glass-border);
     position: relative;
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px 0;
 }
 
-/* La ligne centrale - Gardée de la version précédente */
-.timeline::after {
-    content: '';
-    position: absolute;
-    width: 4px;
-    background-color: var(--tech-blue);
-    top: 0; bottom: 0;
-    left: 50%;
-    margin-left: -2px;
-    border-radius: 10px;
-    opacity: 0.2;
-}
-
-/* Items de la timeline */
-.timeline-item {
-    padding: 10px 40px;
-    position: relative;
-    width: 50%;
-    box-sizing: border-box;
-    /* Ajustement des paddings pour laisser de la place au cercle et à la date */
-    padding-right: 60px; /* Espace pour le cercle + date à droite */
-    padding-left: 40px; /* Garde le padding initial à gauche */
-}
-
-.timeline-item.left {
-    left: 0;
-    text-align: right;
-    padding-left: 40px; /* Réinitialiser le padding gauche pour les éléments de gauche */
-    padding-right: 60px; /* Laisser de la place pour le point et la date à droite */
-}
-.timeline-item.right {
-    left: 50%;
-    text-align: left;
-    padding-left: 60px; /* Laisser de la place pour le point et la date à gauche */
-    padding-right: 40px; /* Réinitialiser le padding droit pour les éléments de droite */
-}
-.timeline-item.focus {
-    left: 25%;
-    width: 50%;
-    text-align: center;
-    margin-top: 50px;
-    padding-left: 20px; /* Ajuster un peu le padding pour le focus */
-    padding-right: 20px;
-}
-
-/* Bulles de contenu - Gardées de la version précédente */
-.timeline-content {
-    padding: 25px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease;
-    height: auto; /* Important: Assure que la hauteur s'adapte au contenu */
-}
-
-.timeline-content:hover {
-    transform: translateY(-5px);
-}
-
-/* Nouveau style pour la date sur la timeline */
+/* --- LES DATES (ANCHORÉES SUR LA LIGNE) --- */
 .timeline-date {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%); /* Centrage vertical */
-    font-weight: 800;
-    font-size: 1.5rem;
+    /* On force le placement sur la ligne centrale du conteneur .timeline */
+    left: auto; 
+    transform: translateY(-50%);
+    
+    background: var(--main-dark-blue);
     color: var(--tech-blue);
-    background-color: white; /* Pour contraster avec la ligne */
-    padding: 5px 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    z-index: 1; /* Pour qu'il soit au-dessus de la ligne */
-    min-width: 80px; /* Pour une taille minimale */
-    text-align: center; /* Centrer le texte dans la bulle de date */
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 2px solid var(--tech-blue);
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
 }
 
-/* Positionnement des dates pour les éléments "left" et "right" */
+/* Placement précis de la bulle de date par rapport à la ligne */
 .timeline-item.left .timeline-date {
-    right: -100px; /* Déplacer plus à droite pour les items de gauche, hors du padding */
+    right: -72px; /* Ajuste cette valeur pour centrer pile sur la ligne */
 }
 
 .timeline-item.right .timeline-date {
-    left: -100px; /* Déplacer plus à gauche pour les items de droite, hors du padding */
+    left: -72px; /* Ajuste cette valeur pour centrer pile sur la ligne */
 }
 
-/* Les petits cercles sur la ligne */
-.timeline-item::after {
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    background-color: var(--tech-blue);
-    border: 3px solid white; /* Petite bordure blanche */
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 50%;
-    z-index: 2; /* Au-dessus de la ligne */
+/* --- LE DERNIER CADRE (FOCUS) --- */
+.timeline-item.focus {
+    width: 100%;
+    left: 0;
+    justify-content: center;
+    padding: 40px 20px;
 }
 
-.timeline-item.left::after {
-    right: -8px; /* Position sur la ligne centrale */
+.timeline-item.focus .timeline-content {
+    max-width: 650px;
+    text-align: center;
+    border-color: var(--tech-blue);
 }
 
-.timeline-item.right::after {
-    left: -8px; /* Position sur la ligne centrale */
-}
-
-/* Le "focus" n'a pas de cercle ni de date à côté, on le gère différemment */
-.timeline-item.focus::after {
-    display: none; /* Cacher le cercle pour le focus */
-}
 .timeline-item.focus .timeline-date {
-    position: static; /* Supprimer le positionnement absolu */
-    transform: none; /* Supprimer la transformation */
-    margin: 20px auto; /* Centrer la date et ajouter de l'espace */
-    display: block; /* Pour que margin auto fonctionne */
-    width: fit-content; /* Adapter la largeur au contenu */
+    display: none;
 }
 
-/* Tags de couleur - Mise à jour et ajout du nouveau tag */
+/* --- LES CARTES (GLASSMORPHISM) --- */
+.timeline-content {
+    width: 100%;
+    max-width: 420px;
+    background: var(--glass-card);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: translateY(-5px);
+    border-color: var(--tech-blue);
+}
+
+.timeline-content h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.timeline-content p {
+    color: #94a3b8;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* --- LES DATES (FIXÉES SUR LA LIGNE) --- */
+/* --- LES DATES (ANCRÉES SUR LA LIGNE) --- */
+.timeline-date {
+    position: absolute;
+    top: 50%;
+    /* On utilise le même fond que ton site pour masquer la ligne dessous */
+    background: var(--main-dark-blue); 
+    color: var(--tech-blue);
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 2px solid var(--tech-blue);
+    z-index: 100;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+    white-space: nowrap;
+}
+
+/* À GAUCHE : On la place à l'extrémité droite du bloc + on la décale de moitié */
+.timeline-item.left .timeline-date {
+    right: 0;
+    /* 50% pour la centrer sur le bord, + 40px (marge de sécurité) pour toucher la ligne */
+    transform: translate(calc(50% + 40px), -50%); 
+}
+
+/* À DROITE : On la place à l'extrémité gauche du bloc + on la décale de moitié */
+.timeline-item.right .timeline-date {
+    left: 0;
+    /* -50% pour la centrer sur le bord, - 40px (marge de sécurité) pour toucher la ligne */
+    transform: translate(calc(-50% - 40px), -50%);
+}
+
+/* --- TAGS --- */
 .tag {
     display: inline-block;
     padding: 5px 12px;
@@ -453,29 +242,66 @@ nav a:hover {
     font-weight: 800;
     margin-bottom: 15px;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.tag-problem { background: rgba(231, 76, 60, 0.1); color: var(--collision-red); }
-.tag-solution { background: rgba(52, 152, 219, 0.1); color: var(--sky-blue); }
-.tag-mandatory { background: rgba(0, 128, 0, 0.1); color: green; } /* Nouveau tag pour "Obligatoire" */
-.tag-focus { background: var(--tech-blue); color: white; } /* Gardé tel quel */
+.tag-problem { background: rgba(239, 68, 68, 0.1); color: var(--collision-red); border: 1px solid rgba(239, 68, 68, 0.2); }
+.tag-solution { background: rgba(59, 130, 246, 0.1); color: var(--tech-blue); border: 1px solid rgba(59, 130, 246, 0.2); }
+.tag-mandatory { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
 
+/* --- LE DERNIER CADRE (FOCUS) --- */
+.timeline-item.focus {
+    width: 100%;
+    left: 0;
+    justify-content: center;
+    padding: 40px 20px;
+}
 
-/* Bouton "En savoir plus" */
-.btn-tech {
+.timeline-item.focus .timeline-content {
+    max-width: 700px;
+    border: 1px solid var(--tech-blue);
+    background: rgba(59, 130, 246, 0.05);
+    text-align: center;
+}
+
+.timeline-item.focus .tag {
     background: var(--tech-blue);
     color: white;
-    padding: 15px 35px;
+}
+
+.timeline-item.focus .timeline-date {
+    display: none; /* Pas de date volante pour le focus final */
+}
+
+/* --- BOUTON EN SAVOIR PLUS --- */
+.btn-tech {
+    display: block;          /* Force le bouton à se comporter comme un bloc */
+    width: fit-content;      /* Le bloc ne prend que la largeur nécessaire au texte */
+    margin: 60px auto;       /* Centre horizontalement (auto) et ajoute de l'espace en haut/bas (60px) */
+    
+    background: var(--tech-blue);
+    color: white;
+    padding: 18px 40px;
     border-radius: 50px;
     text-decoration: none;
-    font-weight: 700;
-    margin-top: 60px; /* Espace après la timeline */
-    display: inline-block; /* Pour centrer si besoin */
-    transition: background-color 0.3s ease;
+    font-weight: 800;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    border: none;
+    cursor: pointer;
 }
+
 .btn-tech:hover {
-    background-color: #1a2a6b; /* Un peu plus foncé au survol */
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.5);
+    background: #2563eb; /* Un bleu légèrement plus soutenu au survol */
 }
 
-
-/*fin page histoire*/
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 768px) {
+    .timeline::after { left: 30px; }
+    .timeline-item { width: 100%; left: 0 !important; padding-left: 70px !important; padding-right: 20px !important; text-align: left !important; }
+    .timeline-date { left: 30px !important; transform: translate(-50%, -50%); font-size: 1rem; }
+    .hero-section h1 { font-size: 2rem; }
+}
