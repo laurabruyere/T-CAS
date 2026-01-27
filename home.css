@@ -231,13 +231,6 @@ nav a:hover {
 
 /* --- SECTION STATS --- */
 .stats-container {
-<<<<<<< HEAD
-    margin-top: 100px; /* Espace pour forcer l'utilisateur à scroller */
-}
-
-
-
-=======
     display: flex;
     justify-content: space-around;
     width: 100%;
@@ -264,4 +257,3 @@ nav a:hover {
     letter-spacing: 1px;
     font-size: 0.8rem;
 }
->>>>>>> origin/main
