@@ -1,0 +1,79 @@
+:root {
+    --sky-blue: #1a2a44;
+    /* Bleu nuit pour l'intro */
+    --main-dark-blue: #0f172a;
+    /* Fond profond du site */
+    --ta-yellow: #f1c40f;
+    --ra-orange: #e67e22;
+    --collision-red: #ef4444;
+    --tech-blue: #3b82f6;
+    /* Bleu néon pour les accents */
+    --glass-header: rgba(15, 23, 42, 0.9);
+    --glass-card: rgba(255, 255, 255, 0.03);
+}
+
+/* Enable scrolling for this page overriding home.css */
+body,
+html {
+    overflow-y: auto !important;
+}
+
+/* --- ADAPTATION POUR LE JEU --- */
+.game-integration {
+    width: 90%;
+    max-width: 1000px;
+    border: 2px solid var(--tech-blue);
+    /* Accentuation pour le jeu */
+}
+
+#game-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 12px;
+    margin: 20px 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.game-placeholder {
+    color: var(--tech-blue);
+    font-family: monospace;
+}
+
+/* --- STYLE MATHÉMATIQUE (LATEX) --- */
+.math-block {
+    background: rgba(15, 23, 42, 0.5);
+    padding: 20px;
+    border-left: 4px solid var(--tech-blue);
+    margin: 20px 0;
+    font-size: 1.2rem;
+    color: #f1f5f9;
+}
+
+.tech-note {
+    font-size: 0.75rem;
+    opacity: 0.5;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+/* Animation d'apparition pour les stats */
+.stat-item {
+    animation: fadeInScale 0.8s ease-out forwards;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

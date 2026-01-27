@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMULATEUR T-CAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="jeu.css">
+</head>
+
+<body>
+
+    <div id="main-site" style="opacity: 1;">
+        <!-- Force opacity 1 since we might not have the intro JS logic here yet or want to skip it -->
+        <header>
+            <div class="title">TECHNOLOGIE : T-CAS</div>
+            <nav>
+                <a href="home.html">ACCUEIL</a>
+                <a href="histoire.html">HISTOIRE</a>
+                <a href="technologie.html">TECHNOLOGIE</a>
+                <a href="jeu.html" style="color: var(--tech-blue);">SIMULATEUR</a>
+            </nav>
+        </header>
+
+        <div class="content">
+
+            <!-- Section : L'Intelligence en Temps Réel -->
+            <div class="definition-box">
+                <h2>Le Cerveau du Ciel : Les Chiffres du TCAS</h2>
+                <p>Pour éviter une collision à <span style="color: var(--tech-blue); font-weight: bold;">800
+                        km/h</span>, l'avion ne mesure pas des mètres, il mesure des secondes. C'est le concept du
+                    <strong>TAU</strong> : un compte à rebours invisible.
+                </p>
+            </div>
+
+            <!-- Section : Dashboard des Statistiques -->
+            <div class="stats-container">
+                <div class="stat-item">
+                    <h3 id="stat-freq">1090</h3>
+                    <p>Fréquence (MHz)</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="stat-tau">25</h3>
+                    <p>TAU Critique (s)</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="stat-react">&lt; 5</h3>
+                    <p>Réaction Pilote (s)</p>
+                </div>
+            </div>
+
+            <!-- Section : Le Simulateur "Mission Zéro Crash" -->
+            <section class="definition-box game-integration">
+                <h2>MISSION : ZÉRO CRASH</h2>
+                <p>Consigne : "Prenez les commandes. Votre mission : traverser la zone de conflit sans déclencher
+                    d'accident".</p>
+                <p>Utilisez les rails d'évitement dès que vous entrez dans la Zone Rouge.</p>
+
+                <div id="game-container">
+                    <div class="game-placeholder">
+                        <p>[INTÉGRATION JEU VIDÉO ICI]</p>
+                    </div>
+                </div>
+
+                <p class="tech-note">Logiciel basé sur l'algorithme de résolution 1030 MHz (Simulateur reprenant les
+                    rails réels de notre support physique).</p>
+            </section>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
