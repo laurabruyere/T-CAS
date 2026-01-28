@@ -1,0 +1,88 @@
+/* === À PROPOS PAGE STYLES === */
+
+body,
+html {
+    overflow-y: auto !important;
+}
+
+.team-section,
+.tech-specs {
+    max-width: 800px;
+    background: var(--glass-card);
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 40px;
+    backdrop-filter: blur(5px);
+}
+
+.team-section h3,
+.tech-specs h3 {
+    color: var(--tech-blue);
+    margin-top: 0;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.team-section p {
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+.mission-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+}
+
+.mission-list li {
+    padding: 15px 20px;
+    margin: 10px 0;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.mission-list li:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateX(10px);
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s;
+}
+
+.spec-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.spec-label {
+    color: #64748b;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.spec-value {
+    color: var(--tech-blue);
+    font-size: 1.3rem;
+    font-weight: 700;
+}

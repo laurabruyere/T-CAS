@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIZ EXPERT TCAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+
+    <div id="main-site" style="opacity: 1;">
+        <header>
+            <div class="title">TECHNOLOGIE : T-CAS</div>
+            <nav>
+                <a href="home.html">ACCUEIL</a>
+                <a href="histoire.html">FONCTIONNEMENT</a>
+                <a href="jeu.html">SIMULATEUR</a>
+                <a href="quiz.html" style="color: var(--tech-blue);">QUIZ</a>
+                <a href="apropos.html">À PROPOS</a>
+            </nav>
+        </header>
+
+        <div class="content">
+
+            <!-- ÉTAPE 1 : ENREGISTREMENT -->
+            <section id="step-registration" class="quiz-step active">
+                <div class="quiz-container">
+                    <div class="step-indicator">
+                        <span class="step-badge">ÉTAPE 1/3</span>
+                    </div>
+                    <h2>Devenez Expert TCAS</h2>
+                    <p class="intro-text">Bienvenue dans le défi ultime ! Répondez correctement aux <strong>10
+                            questions</strong> pour obtenir votre <span class="highlight">Certificat d'Expertise
+                            TCAS</span>.</p>
+
+                    <form id="registration-form">
+                        <div class="form-group">
+                            <label for="prenom">Prénom</label>
+                            <input type="text" id="prenom" placeholder="Votre prénom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nom">Nom</label>
+                            <input type="text" id="nom" placeholder="Votre nom" required>
+                        </div>
+                        <button type="submit" class="btn-start">
+                            <span>COMMENCER LE QUIZ</span>
+                            <span class="arrow">→</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 2 : QUIZ -->
+            <section id="step-quiz" class="quiz-step">
+                <div class="quiz-container">
+                    <div class="step-indicator">
+                        <span class="step-badge">ÉTAPE 2/3</span>
+                        <span class="progress-text">Question <span id="current-question">1</span>/10</span>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+
+                    <div id="question-container">
+                        <h3 id="question-text"></h3>
+                        <div id="answers-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ÉTAPE 3 : RÉSULTAT -->
+            <section id="step-result" class="quiz-step">
+                <!-- Résultat échec -->
+                <div id="result-fail" class="quiz-container result-container" style="display: none;">
+                    <div class="result-icon fail">X</div>
+                    <h2>Presque Expert !</h2>
+                    <p class="score-text">Votre score : <span id="score-fail" class="score-value">0</span>/10</p>
+                    <p class="encourage-text">Ne vous découragez pas ! Le TCAS est un système complexe. Révisez les
+                        pages du site et retentez votre chance.</p>
+                    <button class="btn-retry" onclick="restartQuiz()">
+                        <span>RÉESSAYER</span>
+                    </button>
+                </div>
+
+                <!-- Résultat succès : DIPLÔME OFFICIEL -->
+                <div id="result-success" class="diploma-wrapper" style="display: none;">
+                    <div id="printable-diploma" class="classic-certificate">
+                        <div class="certificate-frame">
+                            <div class="certificate-inner">
+                                <header class="cert-header">
+                                    <h1>ATTESTATION DE RÉUSSITE</h1>
+                                    <span class="cert-subtitle">INITIATION À LA SÉCURITÉ AÉRIENNE & SYSTÈME TCAS
+                                        II</span>
+                                </header>
+
+                                <section class="cert-body">
+                                    <p class="cert-intro">Nous attestons par la présente que :</p>
+
+                                    <h2 id="student-name-final" class="student-signature">Jean Dupont</h2>
+
+                                    <p class="cert-description">
+                                        A validé avec succès le parcours de simulation d'urgence. <br>
+                                        Ce certificat récompense la compréhension de la <strong>logique du TAU</strong>
+                                        (le calcul du temps restant avant impact) et la capacité démontrée à appliquer
+                                        la règle de <strong>priorité absolue de l'automate</strong> sur l'humain en
+                                        situation critique.
+                                    </p>
+                                </section>
+
+                                <section class="cert-skills">
+                                    <h3>Compétences techniques validées :</h3>
+                                    <ul>
+                                        <li>Réactivité conforme sur alerte RA (Resolution Advisory).</li>
+                                        <li>Respect des procédures de coordination radio 1030/1090 MHz.</li>
+                                    </ul>
+                                </section>
+
+                                <footer class="cert-footer">
+                                    <div class="date-box">
+                                        <p>Délivré le : <span id="cert-date">28/01/2026</span></p>
+                                    </div>
+                                    <div class="signature-box">
+                                        <p>L'Équipe Pédagogique du Projet TCAS</p>
+                                        <div class="signature-line"></div>
+                                    </div>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-download no-print" onclick="downloadDiploma()">
+                        TÉLÉCHARGER MON DIPLÔME (PDF)
+                    </button>
+                    <button class="btn-print no-print" onclick="window.print()">
+                        IMPRIMER LE DIPLÔME
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Libraries for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="quiz.js"></script>
+</body>
+
+</html>
