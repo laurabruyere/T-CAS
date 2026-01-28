@@ -1,74 +1,14 @@
 // === QUIZ DATA ===
 const questions = [
     {
-        question: "Quelle est la \"Règle d'Or\" absolue pour un pilote ?",
+        question: "C'est quoi le T-CAS ?",
         answers: [
-            "A) Suivre les ordres du contrôleur aérien au sol.",
-            "B) Obéir immédiatement au TCAS, même si le contrôleur dit le contraire.",
-            "C) Attendre de voir l'avion par le hublot."
+            "A) Un système GPS pour trouver les aéroports.",
+            "B) Un bouclier invisible qui prévient le pilote si un autre avion s'approche trop.",
+            "C) Un système de divertissement pour les passagers."
         ],
         correct: 1,
-        explanation: "Le TCAS a toujours raison ! En cas de conflit entre le contrôleur aérien et le TCAS, le pilote DOIT suivre le TCAS. C'est la règle d'or car le système voit des dangers que l'humain ne peut pas détecter à temps."
-    },
-    {
-        question: "Qu'est-ce que le \"TAU\" calculé par l'ordinateur ?",
-        answers: [
-            "A) La distance exacte en kilomètres entre les deux avions.",
-            "B) Le temps restant avant l'impact (compte à rebours).",
-            "C) La puissance des moteurs de l'avion."
-        ],
-        correct: 1,
-        explanation: "Le TAU (τ) est un compte à rebours ! Il calcule le temps restant avant l'impact, pas la distance. C'est plus utile car à 800 km/h, les distances changent très vite. TAU = Distance ÷ Vitesse de rapprochement."
-    },
-    {
-        question: "Sur quelle fréquence l'avion envoie-t-il sa réponse (je suis ici !) ?",
-        answers: [
-            "A) 1030 MHz.",
-            "B) 1090 MHz.",
-            "C) 900 MHz."
-        ],
-        correct: 1,
-        explanation: "Retiens : 1030 MHz pour interroger, 1090 MHz pour répondre ! L'avion reçoit les questions sur 1030 MHz et envoie sa position sur 1090 MHz. C'est comme une conversation radio codée entre avions."
-    },
-    {
-        question: "Si le TCAS crie \"CLIMB, CLIMB\", en combien de temps le pilote doit-il agir ?",
-        answers: [
-            "A) Moins de 5 secondes.",
-            "B) En une minute.",
-            "C) Dès qu'il a fini son café."
-        ],
-        correct: 0,
-        explanation: "Moins de 5 secondes ! C'est une question de vie ou de mort. À 800 km/h, les avions se rapprochent de 400 mètres par seconde. Le pilote doit réagir immédiatement, sans réfléchir."
-    },
-    {
-        question: "Sur l'écran radar, quel symbole représente un danger immédiat (RA) ?",
-        answers: [
-            "A) Un losange blanc.",
-            "B) Un rond jaune.",
-            "C) Un carré rouge."
-        ],
-        correct: 2,
-        explanation: "Le carré rouge = danger immédiat (RA) ! Le rond jaune représente une alerte de trafic (TA), et le losange blanc/bleu montre les avions sans danger. Plus le symbole est rouge et carré, plus c'est urgent !"
-    },
-    {
-        question: "À combien de secondes de l'impact l'alerte rouge (RA) se déclenche-t-elle ?",
-        answers: [
-            "A) 40 secondes.",
-            "B) 25 secondes.",
-            "C) 5 secondes."
-        ],
-        correct: 1,
-        explanation: "25 secondes avant l'impact ! C'est le TAU critique pour déclencher une RA. L'alerte jaune (TA) se déclenche vers 40 secondes. À 5 secondes, il serait beaucoup trop tard pour réagir."
-    },
-    {
-        question: "Comment s'appelle le message de coordination envoyé entre les deux avions ?",
-        answers: [
-            "A) Le message SOS.",
-            "B) Le message RAC (Resolution Advisory Complement).",
-            "C) Un e-mail prioritaire."
-        ],
-        correct: 1,
-        explanation: "Le message RAC permet aux deux avions de se coordonner ! Si un avion monte, l'autre doit descendre. Le RAC garantit que les deux TCAS donnent des ordres complémentaires pour éviter la collision."
+        explanation: "Le T-CAS est comme un bouclier invisible autour de l'avion. Si un autre avion s'approche trop, il prévient le pilote pour éviter une collision."
     },
     {
         question: "Quel événement tragique a provoqué l'invention du TCAS ?",
@@ -81,24 +21,84 @@ const questions = [
         explanation: "La collision du Grand Canyon en 1956 a été un tournant. Deux avions se sont percutés car les pilotes ne comptaient que sur leurs yeux. Cette tragédie a lancé la recherche qui a mené au TCAS."
     },
     {
-        question: "Quelle unité le calculateur utilise-t-il pour mesurer l'altitude ?",
+        question: "Pourquoi la détection visuelle par les pilotes est-elle devenue insuffisante ?",
         answers: [
-            "A) Le Mètre (m).",
-            "B) Le Pied (ft).",
-            "C) Le Kilomètre (km)."
+            "A) Les pilotes ont besoin de lunettes.",
+            "B) Les avions volent trop vite (900 km/h) et le trafic est trop dense.",
+            "C) Il fait toujours nuit dans le ciel."
         ],
         correct: 1,
-        explanation: "L'aviation utilise le Pied (ft) ! 1 pied = 30,48 cm. C'est un standard international. Quand le TCAS dit de monter de 1000 ft, cela représente environ 300 mètres."
+        explanation: "Les avions modernes volent à 900 km/h et le trafic aérien est devenu très dense. À ces vitesses, impossible pour l'œil humain de détecter un danger à temps !"
     },
     {
-        question: "Quelle est la précision requise pour valider un signal radio TCAS ?",
+        question: "En quelle année le TCAS II a-t-il été développé ?",
         answers: [
-            "A) 1 seconde.",
-            "B) Quelques microsecondes (μs).",
-            "C) Pas de précision particulière."
+            "A) Dans les années 1950.",
+            "B) Dans les années 1980.",
+            "C) En 2020."
         ],
         correct: 1,
-        explanation: "Des microsecondes (millionièmes de seconde) ! Le signal radio voyage à 300 000 km/s. Pour calculer la distance précisément, le TCAS mesure le temps de réponse avec une précision extrême."
+        explanation: "Le TCAS II a été développé dans les années 1980 aux États-Unis. C'est à cette époque que les avions ont commencé à 'dialoguer' entre eux par radio."
+    },
+    {
+        question: "Depuis quand le T-CAS est-il obligatoire en Europe ?",
+        answers: [
+            "A) Depuis 1956.",
+            "B) Depuis l'an 2000.",
+            "C) Il n'est pas obligatoire."
+        ],
+        correct: 1,
+        explanation: "Depuis l'an 2000, le T-CAS est obligatoire dans tous les avions importants (plus de 19 passagers ou 5,7 tonnes) en Europe. Sans TCAS, pas de décollage !"
+    },
+    {
+        question: "Où se trouve le 'cerveau' du T-CAS dans l'avion ?",
+        answers: [
+            "A) Dans le cockpit, sur les genoux du pilote.",
+            "B) C'est une boîte métallique cachée dans une soute sous les pieds des pilotes.",
+            "C) Sur le toit de l'avion, à côté des antennes."
+        ],
+        correct: 1,
+        explanation: "Le calculateur TCAS est une boîte métallique cachée dans une soute spéciale sous les pieds des pilotes. C'est lui qui réfléchit très vite pour calculer le danger."
+    },
+    {
+        question: "Où sont placées les antennes du T-CAS sur l'avion ?",
+        answers: [
+            "A) Uniquement sur les ailes.",
+            "B) Sur le dos et sous le ventre de l'avion.",
+            "C) Dans les moteurs."
+        ],
+        correct: 1,
+        explanation: "L'avion a des antennes sur son dos et sous son ventre. Elles permettent de 'parler' aux autres avions et de savoir exactement où ils se trouvent."
+    },
+    {
+        question: "Que dit le T-CAS quand un avion entre dans la zone jaune ?",
+        answers: [
+            "A) 'Climb ! Climb !'",
+            "B) 'Traffic, Traffic'",
+            "C) 'Atterrissage immédiat !'"
+        ],
+        correct: 1,
+        explanation: "Dans la zone jaune (attention), le T-CAS dit 'Traffic, Traffic' pour prévenir le pilote qu'un autre avion est proche. C'est un message d'alerte, pas encore d'urgence."
+    },
+    {
+        question: "Que signifie la zone orange sur le radar T-CAS ?",
+        answers: [
+            "A) Tout va bien, pas de danger.",
+            "B) Danger ! Le pilote doit agir.",
+            "C) L'avion a besoin de carburant."
+        ],
+        correct: 1,
+        explanation: "La zone orange signifie DANGER ! Le T-CAS crie 'Climb ! Climb !' ou 'Descend !' et le pilote doit obéir immédiatement pour éviter la collision."
+    },
+    {
+        question: "Combien de zones de sécurité le T-CAS surveille-t-il autour de l'avion ?",
+        answers: [
+            "A) 1 seule zone.",
+            "B) 3 zones : jaune (attention), orange (danger) et rouge (collision).",
+            "C) 10 zones différentes."
+        ],
+        correct: 1,
+        explanation: "Le T-CAS surveille 3 zones : la zone jaune (attention - 'Traffic, Traffic'), la zone orange (danger - 'Climb/Descend') et la zone rouge (collision critique)."
     }
 ];
 
