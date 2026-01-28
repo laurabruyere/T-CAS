@@ -1,82 +1,232 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>À PROPOS - T-CAS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap"
-        rel="stylesheet">
+    <title>À Propos de Notre Équipe - T-CAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="apropos.css">
-</head>
+    <style>
+        /* --- Styles Spécifiques à la page À Propos --- */
+        body, html {
+            overflow-y: auto !important; /* Permet le défilement */
+            height: auto !important;
+            background-color: var(--main-dark-blue); /* Couleur de fond cohérente */
+            font-family: 'Plus Jakarta Sans', sans-serif; /* Police cohérente */
+        }
 
+        #main-site {
+            opacity: 1 !important; /* Affiche le contenu directement */
+            display: block !important;
+            min-height: 100vh;
+        }
+
+        .about-container {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .about-hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .about-hero h1 {
+            font-size: 3rem;
+            color: var(--tech-blue);
+            margin-bottom: 20px;
+        }
+
+        .about-hero p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Section de l'équipe */
+        .team-section {
+            background: var(--glass-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 50px;
+            margin-bottom: 80px;
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+
+        .team-section h2 {
+            color: var(--tech-blue);
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-member {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-8px);
+            border-color: var(--tech-blue);
+        }
+
+        .team-member h3 {
+            color: white;
+            font-size: 1.4rem;
+            margin: 15px 0 5px 0;
+        }
+
+        .team-member p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Section Objectifs */
+        .objectives-section {
+            background: var(--glass-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 50px;
+            backdrop-filter: blur(15px);
+        }
+
+        .objectives-section h2 {
+            color: var(--tech-blue);
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .objective-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .objective-icon {
+            font-size: 2rem;
+            color: var(--tech-blue);
+            flex-shrink: 0; /* Empêche l'icône de rétrécir */
+        }
+
+        .objective-text h3 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .objective-text p {
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
 <body>
 
-    <div id="main-site" style="opacity: 1;">
+    <div id="main-site">
         <header>
-            <div class="title">TECHNOLOGIE : T-CAS</div>
+            <div class="title">T-CAS : NOTRE ÉQUIPE</div>
             <nav>
-                <a href="home.html">ACCUEIL</a>
-                <a href="histoire.html">FONCTIONNEMENT</a>
+                <a href="index.html">ACCUEIL</a>
+                <a href="histoire.html" class="active">HISTOIRE</a>
+                <a href="technologie.html">TECHNOLOGIE</a>
                 <a href="jeu.html">SIMULATEUR</a>
-                <a href="quiz.html">QUIZ</a>
-                <a href="apropos.html" style="color: var(--tech-blue);">À PROPOS</a>
+                <a href="apropos.html" style="color:var(--tech-blue)">À PROPOS</a>
             </nav>
         </header>
 
-        <div class="content">
+        <div class="about-container">
+            <section class="about-hero">
+                <h1>Qui sommes-nous ?</h1>
+                <p>Nous sommes une équipe d'étudiants passionnés par le digital, réunis autour d'un objectif : rendre la technologie aéronautique accessible et captivante.</p>
+            </section>
 
-            <div class="definition-box">
-                <h2>L'Équipe & La Genèse du Projet</h2>
-                <p>Ce projet pédagogique a été conçu pour expliquer le fonctionnement du système <strong>TCAS</strong>
-                    (Traffic Collision Avoidance System) de manière interactive et accessible aux collégiens.</p>
-            </div>
+            <section class="team-section">
+                <h2>L'Équipe</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <h3>Viktor</h3>
+                        <p>Développeur Front-end</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>Mélina</h3>
+                        <p>Designer UX/UI</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>Laura</h3>
+                        <p>Rédactrice Contenu</p>
+                    </div>
+                    <div class="team-member">
+                        <h3>Louanne</h3>
+                        <p>Gestion de Projet</p>
+                    </div>
 
-            <div class="team-section">
-                <h3>Notre Mission</h3>
-                <p>Rendre la technologie aéronautique compréhensible à travers :</p>
-                <ul class="mission-list">
-                    <li>Des explications claires sur le fonctionnement du TCAS</li>
-                    <li>Une simulation 3D interactive</li>
-                    <li>Un quiz pour valider les connaissances</li>
-                    <li>Un diplôme personnalisé pour les experts</li>
-                </ul>
-            </div>
-
-            <div class="tech-specs">
-                <h3>Fiche Technique</h3>
-                <div class="specs-grid">
-                    <div class="spec-item">
-                        <span class="spec-label">Système</span>
-                        <span class="spec-value">TCAS II</span>
+                    <div class="team-member" style="border-color: #fbbf24; background: rgba(251, 191, 36, 0.05);">
+                        <h3 style="color: #fbbf24;">Anthony</h3>
+                        <p>Prépa Ingénieur</p>
+                        <span style="font-size: 0.7rem; color: #fbbf24; font-weight: bold;">CONSEILLER TECHNIQUE</span>
                     </div>
-                    <div class="spec-item">
-                        <span class="spec-label">Fréquence Interrogation</span>
-                        <span class="spec-value">1030 MHz</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">Fréquence Réponse</span>
-                        <span class="spec-value">1090 MHz</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">TAU Critique (RA)</span>
-                        <span class="spec-value">25 secondes</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">Portée Maximale</span>
-                        <span class="spec-value">~40 NM</span>
-                    </div>
-                    <div class="spec-item">
-                        <span class="spec-label">Précision Temporelle</span>
-                        <span class="spec-value">Microsecondes</span>
+                    <div class="team-member" style="border-color: #fbbf24; background: rgba(251, 191, 36, 0.05);">
+                        <h3 style="color: #fbbf24;">Thomas</h3>
+                        <p>Prépa Ingénieur</p>
+                        <span style="font-size: 0.7rem; color: #fbbf24; font-weight: bold;">CONSEILLER TECHNIQUE</span>
                     </div>
                 </div>
-            </div>
+                
+                <p style="color: #94a3b8; margin-top: 40px;">
+                    Étudiants en Communication Digitale, nous avons collaboré avec <strong>Anthony et Thomas</strong>, futurs ingénieurs, pour garantir la précision technique de ce projet.
+                </p>
+            </section>
 
+            <section class="objectives-section">
+                <h2>Pourquoi ce site sur le T-CAS ?</h2>
+                <div class="objective-item">
+                    <span class="objective-icon">📚</span>
+                    <div class="objective-text">
+                        <h3>Un Outil Pédagogique Novateur</h3>
+                        <p>Notre but est de créer un support de cours ludique et moderne sur le T-CAS, un système essentiel mais souvent complexe à expliquer. Nous voulions un site qui donne envie d'apprendre, loin des manuels traditionnels.</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">✈️</span>
+                    <div class="objective-text">
+                        <h3>Vulgariser la Sécurité Aérienne</h3>
+                        <p>Le T-CAS est un pilier de la sécurité en vol. Expliquer son fonctionnement de manière simple, pour des élèves de collège ou lycée, est crucial pour sensibiliser aux technologies qui nous protègent dans les airs.</p>
+                    </div>
+                </div>
+                <div class="objective-item">
+                    <span class="objective-icon">👩‍🏫</span>
+                    <div class="objective-text">
+                        <h3>Support pour les Professeurs</h3>
+                        <p>Ce site est conçu comme une ressource clé en main pour les enseignants. Que ce soit pour des cours de sciences, de technologie ou de culture générale, il offre des explications claires et un simulateur interactif pour illustrer le propos.</p>
+                    </div>
+                </div>
+            </section>
         </div>
+
     </div>
 
 </body>
-
 </html>
+
+
