@@ -7,16 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="home.css">
     <style>
-        /* --- CORRECTIF SPÉCIAL PAGE COURS --- */
+        /* --- CONFIGURATION GÉNÉRALE --- */
         body, html {
-            overflow-y: auto !important; /* On libère le scroll */
-            height: auto !important;     /* On laisse la page grandir selon le texte */
-            background-color: #0f172a;   /* Ton bleu profond */
+            overflow-y: auto !important;
+            height: auto !important;
+            background-color: #0f172a;
             font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
         }
 
         #main-site {
-            opacity: 1 !important; /* On affiche directement le site */
+            opacity: 1 !important;
             display: block !important;
             padding-bottom: 100px;
         }
@@ -27,6 +28,10 @@
             padding: 40px 20px;
         }
 
+        h2 { color: #3b82f6; font-weight: 800; font-size: 1.8rem; }
+        p { color: #94a3b8; line-height: 1.6; font-size: 1.1rem; }
+
+        /* --- ÉTAPES DU COURS --- */
         .lesson-step {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -35,10 +40,9 @@
             align-items: center;
         }
 
-        /* On utilise le nom de classe présent dans ton HTML */
         .img-placeholder {
             width: 100%;
-            background: rgba(30, 41, 59, 0.5); /* Un fond léger pour le style */
+            background: rgba(30, 41, 59, 0.5);
             border: 2px dashed #3b82f6;
             border-radius: 20px;
             padding: 15px;
@@ -46,19 +50,128 @@
         }
 
         .img-placeholder img {
-            width: 100%;      /* L'image prend toute la largeur de sa colonne */
-            height: auto;     /* Garde les proportions */
-            max-height: 300px; /* Évite que l'image soit trop haute */
-            object-fit: cover; /* Recadre proprement si besoin */
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: cover;
             border-radius: 15px;
         }
 
-        /* On force le style de tes titres ici pour être sûr */
-        h2 { color: var(--tech-blue); font-weight: 800; font-size: 1.8rem; }
-        p { color: #94a3b8; line-height: 1.6; font-size: 1.1rem; }
+        /* --- RADAR ULTRA-MODERNE --- */
+        .radar-view {
+            position: relative;
+            width: 450px;
+            height: 450px;
+            margin: 60px auto;
+            background: radial-gradient(circle, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 1) 100%);
+            border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(59, 130, 246, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible; /* Permet aux étiquettes de respirer */
+        }
+
+        .radar-view::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center;
+            border-radius: 50%;
+        }
+
+        .own-ship-radar {
+            position: absolute;
+            z-index: 20;
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            clip-path: polygon(50% 0%, 15% 100%, 50% 80%, 85% 100%);
+            filter: drop-shadow(0 0 10px #3b82f6);
+        }
+
+        /* ZONES */
+        .zone {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .zone-ta { width: 400px; height: 400px; border: 1px solid rgba(180, 139, 2, 0.2); z-index: 1; }
+        .zone-ra { width: 250px; height: 250px; border: 1px dashed rgba(194, 65, 12, 0.3); z-index: 2; }
+        .zone-collision { width: 110px; height: 110px; border: 2px solid rgba(185, 28, 28, 0.4); z-index: 3; }
+
+        /* CONTENU DES ALERTE (Caché par défaut) */
+        .zone-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .zone:hover > .zone-content { opacity: 1; }
+
+        /* ALIGNEMENT TEXTE : Alertes en haut, Noms en bas */
+        .info-top {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .info-bottom {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+
+        /* EFFETS SURVOL COULEURS */
+        .zone-ta:hover {
+            background: radial-gradient(circle, rgba(180, 139, 2, 0.15) 0%, transparent 70%);
+            border-color: #b48b02;
+        }
+        .zone-ra:hover {
+            background: radial-gradient(circle, rgba(194, 65, 12, 0.25) 0%, transparent 70%);
+            border-color: #f97316;
+        }
+        .zone-collision:hover {
+            background: rgba(185, 28, 28, 0.3);
+            border-color: #ef4444;
+            animation: pulse-red 1s infinite alternate;
+        }
+
+        @keyframes pulse-red {
+            from { box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+            to { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
+        }
+
+        .alert-badge {
+            background: rgba(0,0,0,0.5);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            border: 1px solid currentColor;
+        }
 
         @media (max-width: 768px) {
             .lesson-step { grid-template-columns: 1fr; }
+            .radar-view { width: 320px; height: 320px; }
+            .zone-ta { width: 300px; height: 300px; }
         }
     </style>
 </head>
@@ -70,10 +183,10 @@
             <nav>
                 <a href="home.html">ACCUEIL</a>
                 <a href="histoire.html">HISTOIRE</a>
-                <a href="technologie.html"class="active">TECHNOLOGIE</a>
+                <a href="technologie.html" class="active">TECHNOLOGIE</a>
                 <a href="jeu.html">SIMULATEUR</a>
                 <a href="quiz.html">QUIZ</a>
-                <a href="apropos.html" >À PROPOS</a>
+                <a href="apropos.html">À PROPOS</a>
             </nav>
         </header>
 
@@ -87,49 +200,53 @@
             <div class="lesson-step">
                 <div class="img-placeholder"> 
                     <img src="c:\Users\memer\Downloads\TCAS.webp" alt="Cerveau du TCAS"> 
-                    <p style="color: var(--tech-blue); font-size: 0.8rem; margin-top: 10px;">Le "Cerveau" de l'avion (Calculateur)</p> 
+                    <p style="color: #3b82f6; font-size: 0.8rem; margin-top: 10px;">Le "Cerveau" de l'avion (Calculateur)</p> 
                 </div>
-
                 <div class="vulg-text">
                     <h2>1. À quoi ça ressemble ?</h2>
-                    <p>Dans l'avion, c'est une <strong>boîte métallique</strong>. Elle est cachée dans une soute spéciale sous les pieds des pilotes. C'est elle qui réfléchit très vite pour calculer le danger.</p>
-                </div>
-            </div>
-
-            <div class="lesson-step" style="direction: rtl;">
-                <div class="img-placeholder"> 
-                    <img src="c:\Users\memer\Downloads\unnamed.jpg" alt="Où sont les antennes ?"> 
-                    <p style="color: var(--tech-blue); font-size: 0.8rem; margin-top: 10px;">Le "Cerveau" de l'avion (Calculateur)</p> 
-                </div>
-                <div class="vulg-text" style="direction: ltr;">
-                    <h2>2. Ses yeux et ses oreilles</h2>
-                    <p>L'avion a des <strong>antennes</strong> sur son dos et sous son ventre. Elles permettent de "parler" aux autres avions et de savoir exactement où ils se cachent.</p>
+                    <p>Dans l'avion, c'est une <strong>boîte métallique</strong>. Elle est cachée dans une soute spéciale sous les pieds des pilotes.</p>
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: 50px;">
                 <h2>3. Les 3 zones de sécurité</h2>
-                <p>Voici comment le T-CAS surveille le ciel :</p>
+                <p>Survole le radar pour découvrir les alertes :</p>
                 
-                <div class="radar-view" style="margin: 40px auto;">
+                <div class="radar-view">
                     <div class="own-ship-radar"></div>
+                    
                     <div class="zone zone-ta">
-                        <div class="msg">"Traffic, Traffic"</div>
-                        <div class="label" style="color:#b48b02">Zone Jaune : Attention</div>
+                        <div class="zone-content">
+                            <div class="info-top">
+                                <span class="alert-badge" style="color:#b48b02">T-MINUS 45S</span>
+                                <div style="color:#b48b02; font-weight:800; font-size:1.2rem; margin-top:5px;">TRAFFIC</div>
+                            </div>
+                            <div class="info-bottom" style="color:#b48b02">ZONE TA</div>
+                        </div>
                     </div>
+
                     <div class="zone zone-ra">
-                        <div class="msg">"Climb ! Climb !"</div>
-                        <div class="label" style="color:#c2410c">Zone Orange : Danger</div>
+                        <div class="zone-content">
+                            <div class="info-top">
+                                <span class="alert-badge" style="color:#f97316">URGENT : 25S</span>
+                                <div style="color:#f97316; font-weight:800; font-size:1.2rem; margin-top:5px;">CLIMB !</div>
+                            </div>
+                            <div class="info-bottom" style="color:#f97316">ZONE RA</div>
+                        </div>
                     </div>
+
                     <div class="zone zone-collision">
-                        <div class="msg">CRITIQUE</div>
-                        <div class="label" style="color:#b91c1c; padding-bottom:10px;">Collision</div>
+                        <div class="zone-content">
+                            <div class="info-top" style="top: 15px;">
+                                <div style="color:#ef4444; font-weight:900; font-size:0.8rem;">CRITIQUE</div>
+                            </div>
+                            <div class="info-bottom" style="bottom: 15px; color:#ef4444; font-size:0.7rem;">COLLISION</div>
+                        </div>
                     </div>
                 </div>
 
-                <a href="jeu.html" class="btn-tech">PASSER AU SIMULATEUR →</a>
+                <a href="jeu.html" class="btn-tech" style="display:inline-block; margin-top:40px; text-decoration:none; background:#3b82f6; color:white; padding:15px 30px; border-radius:10px; font-weight:bold;">PASSER AU SIMULATEUR →</a>
             </div>
-
         </div>
     </div>
 
