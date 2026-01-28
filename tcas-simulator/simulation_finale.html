@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCAS Guardian - Simulation 3D Immersive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #000;
+            font-family: 'Share Tech Mono', monospace;
+            color: #fff;
+        }
+
+        #canvas3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        #hud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status {
+            font-size: 12px;
+            color: #22c55e;
+        }
+
+        .pfd {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 220px;
+            padding: 15px;
+        }
+
+        .pfd-item {
+            margin-bottom: 12px;
+        }
+
+        .pfd-label {
+            font-size: 10px;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+        }
+
+        .pfd-explain {
+            font-size: 8px;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .pfd-value {
+            font-family: 'Orbitron';
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .alt {
+            color: #3b82f6;
+        }
+
+        .spd {
+            color: #22c55e;
+        }
+
+        .vs {
+            color: #eab308;
+        }
+
+        .thr {
+            color: #f472b6;
+        }
+
+        /* Throttle Bar */
+        .throttle-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            padding: 15px 10px;
+            text-align: center;
+        }
+
+        .throttle-label {
+            font-size: 9px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .throttle-bar {
+            width: 20px;
+            height: 120px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            margin: 0 auto 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .throttle-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, #22c55e, #eab308, #ef4444);
+            border-radius: 10px;
+            transition: height 0.1s;
+        }
+
+        .throttle-val {
+            font-family: 'Orbitron';
+            font-size: 14px;
+            color: #f472b6;
+        }
+
+        .radar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 20, 40, 0.9) 0%, rgba(0, 10, 20, 1) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .radar-ring {
+            position: absolute;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+        }
+
+        .ring1 {
+            width: 33%;
+            height: 33%;
+        }
+
+        .ring2 {
+            width: 66%;
+            height: 66%;
+        }
+
+        .player-icon {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 12px solid #fff;
+        }
+
+        .intruder-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .intruder-dot.ta {
+            background: #eab308;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #eab308;
+            display: block;
+        }
+
+        .intruder-dot.ra {
+            background: #ef4444;
+            border-radius: 0;
+            box-shadow: 0 0 15px #ef4444;
+            display: block;
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            to {
+                transform: translate(-50%, -50%) scale(1.3);
+            }
+        }
+
+        #alertBox {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            padding: 30px 50px;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+
+        #alertBox.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #alertBox.ta {
+            border-color: #eab308;
+            color: #eab308;
+            background: rgba(234, 179, 8, 0.15);
+        }
+
+        #alertBox.ra {
+            border-color: #ef4444;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .alert-title {
+            font-family: 'Orbitron';
+            font-size: 42px;
+            font-weight: 900;
+        }
+
+        .alert-sub {
+            font-size: 20px;
+            margin-top: 8px;
+        }
+
+        #coordMsg {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            font-size: 12px;
+            color: #22c55e;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        #coordMsg.show {
+            opacity: 1;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 100px;
+            right: 20px;
+            text-align: right;
+            font-size: 10px;
+            color: #64748b;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas3d"></canvas>
+
+    <div id="hud">
+        <div class="glass top-bar">
+            <span class="logo">TCAS GUARDIAN</span>
+            <span id="status" class="status">EN VOL</span>
+        </div>
+        <div id="coordMsg" class="glass">⚡ LIAISON 1030/1090 MHz : INTRUS EN DESCENTE → MONTEZ !</div>
+        <div class="glass pfd">
+            <div class="pfd-item">
+                <div class="pfd-label">🛫 ALTITUDE</div>
+                <div class="pfd-explain">Hauteur par rapport au sol (en pieds)</div>
+                <div class="pfd-value alt" id="altVal">9000</div>
+            </div>
+            <div class="pfd-item">
+                <div class="pfd-label">💨 VITESSE</div>
+                <div class="pfd-explain">Vitesse dans l'air (en nœuds, 1 kt ≈ 1.8 km/h)</div>
+                <div class="pfd-value spd" id="spdVal">120</div>
+            </div>
+            <div class="pfd-item">
+                <div class="pfd-label">📈 VARIOMÈTRE</div>
+                <div class="pfd-explain">Vitesse verticale (+ = monte, - = descend)</div>
+                <div class="pfd-value vs" id="vsVal">+0</div>
+            </div>
+        </div>
+        <div class="radar glass">
+            <div class="radar-ring ring1"></div>
+            <div class="radar-ring ring2"></div>
+            <div class="player-icon"></div>
+            <div id="intruderDot" class="intruder-dot"></div>
+        </div>
+        <div class="glass throttle-container">
+            <div class="throttle-label">⛽ GAZ</div>
+            <div class="throttle-bar">
+                <div class="throttle-fill" id="throttleFill" style="height: 70%;"></div>
+            </div>
+            <div class="throttle-val" id="throttleVal">70%</div>
+        </div>
+        <div id="alertBox" class="glass">
+            <div class="alert-title" id="alertTitle">TRAFFIC</div>
+            <div class="alert-sub" id="alertSub">MONITOR</div>
+        </div>
+        <div class="controls">
+            ⬆️⬇️ Cabrer/Piquer<br>
+            ⬅️➡️ Incliner<br>
+            Z/S Gaz ±<br>
+            ESPACE Reset
+        </div>
+    </div>
+
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+
+        // ============ CONFIG ============
+        const CFG = { tauTA: 40, tauRA: 25, spawnTime: 5, collisionTime: 65 };
+
+        // ============ STATE ============
+        const state = {
+            t: 0,
+            player: {
+                pos: new THREE.Vector3(0, 2743, 0),
+                vel: new THREE.Vector3(0, 0, 0),
+                pitch: 0, roll: 0, yaw: 0,
+                throttle: 0.7
+            },
+            intruder: { active: false, pos: new THREE.Vector3(0, 2743, -10000) },
+            tcas: { level: 'NONE' }
+        };
+        const keys = {};
+        window.addEventListener('keydown', e => { keys[e.key] = true; if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault(); });
+        window.addEventListener('keyup', e => keys[e.key] = false);
+
+        // ============ THREE.JS ============
+        const canvas = document.getElementById('canvas3d');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x87ceeb);
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x87ceeb, 1000, 20000);
+
+        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 50000);
+
+        // Lights
+        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+        const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+        sun.position.set(500, 1000, 500);
+        scene.add(sun);
+
+        // ============ TERRAIN ============
+        // 1. Grass Ground
+        const groundGeo = new THREE.PlaneGeometry(100000, 100000, 100, 100);
+        const groundMat = new THREE.MeshLambertMaterial({ color: 0x4ade80 }); // Green
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = 0;
+        scene.add(ground);
+
+        // 2. Mountains (Cones)
+        const mountainMat = new THREE.MeshLambertMaterial({ color: 0x6b7280 });
+        const snowMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+        for (let i = 0; i < 30; i++) {
+            const h = 800 + Math.random() * 1500;
+            const r = 400 + Math.random() * 600;
+            const mountain = new THREE.Mesh(new THREE.ConeGeometry(r, h, 8), mountainMat);
+            mountain.position.set(
+                (Math.random() - 0.5) * 40000,
+                h / 2,
+                -5000 - Math.random() * 30000
+            );
+            scene.add(mountain);
+            // Snow cap
+            const cap = new THREE.Mesh(new THREE.ConeGeometry(r * 0.3, h * 0.2, 8), snowMat);
+            cap.position.set(mountain.position.x, h * 0.9, mountain.position.z);
+            scene.add(cap);
+        }
+
+        // 3. River (Blue Plane)
+        const riverGeo = new THREE.PlaneGeometry(500, 80000);
+        const riverMat = new THREE.MeshLambertMaterial({ color: 0x38bdf8, side: THREE.DoubleSide });
+        const river = new THREE.Mesh(riverGeo, riverMat);
+        river.rotation.x = -Math.PI / 2;
+        river.position.set(-2000, 2, -20000);
+        scene.add(river);
+
+        // 4. Trees (Simple Cones)
+        const treeTrunkMat = new THREE.MeshLambertMaterial({ color: 0x7c3aed });
+        const treeLeafMat = new THREE.MeshLambertMaterial({ color: 0x16a34a });
+        for (let i = 0; i < 200; i++) {
+            const tx = (Math.random() - 0.5) * 20000;
+            const tz = -Math.random() * 40000;
+            // Trunk
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(5, 8, 30, 6), treeTrunkMat);
+            trunk.position.set(tx, 15, tz);
+            scene.add(trunk);
+            // Foliage
+            const leaf = new THREE.Mesh(new THREE.ConeGeometry(30, 80, 6), treeLeafMat);
+            leaf.position.set(tx, 70, tz);
+            scene.add(leaf);
+        }
+
+        // ============ CLOUDS ============
+        const cloudTexture = new THREE.CanvasTexture(createCloudCanvas());
+        const clouds = [];
+        for (let i = 0; i < 80; i++) {
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: cloudTexture, transparent: true, opacity: 0.8 }));
+            sprite.scale.set(300 + Math.random() * 400, 150 + Math.random() * 200, 1);
+            sprite.position.set(
+                (Math.random() - 0.5) * 15000,
+                2500 + Math.random() * 1000,
+                -Math.random() * 20000
+            );
+            clouds.push(sprite);
+            scene.add(sprite);
+        }
+        function createCloudCanvas() {
+            const c = document.createElement('canvas');
+            c.width = 256; c.height = 128;
+            const ctx = c.getContext('2d');
+            const g = ctx.createRadialGradient(128, 64, 0, 128, 64, 100);
+            g.addColorStop(0, 'rgba(255,255,255,1)');
+            g.addColorStop(0.5, 'rgba(255,255,255,0.6)');
+            g.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, 256, 128);
+            return c;
+        }
+
+        // ============ CESSNA (Correct Orientation: Nose = +Z, Tail = -Z) ============
+        function createCessna() {
+            const group = new THREE.Group();
+            const bodyMat = new THREE.MeshLambertMaterial({ color: 0xf5f5f5 });
+            const wingMat = new THREE.MeshLambertMaterial({ color: 0xe0e0e0 });
+            const accentMat = new THREE.MeshLambertMaterial({ color: 0x2563eb });
+            const darkMat = new THREE.MeshLambertMaterial({ color: 0x333333 });
+
+            // Fuselage (along Z axis: nose at +Z, tail at -Z)
+            const fuselage = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 0.9, 10, 16), bodyMat);
+            fuselage.rotation.x = Math.PI / 2; // Lie along Z
+            group.add(fuselage);
+
+            // Nose Cone (+Z)
+            const nose = new THREE.Mesh(new THREE.ConeGeometry(0.9, 2.5, 16), bodyMat);
+            nose.rotation.x = -Math.PI / 2;
+            nose.position.z = 6;
+            group.add(nose);
+
+            // Tail Cone (-Z)
+            const tail = new THREE.Mesh(new THREE.ConeGeometry(0.7, 3, 16), bodyMat);
+            tail.rotation.x = Math.PI / 2;
+            tail.position.z = -6;
+            group.add(tail);
+
+            // Main Wings (along X axis)
+            const wing = new THREE.Mesh(new THREE.BoxGeometry(18, 0.3, 2.5), wingMat);
+            wing.position.y = 0.8;
+            group.add(wing);
+
+            // Horizontal Stabilizer (at tail)
+            const hStab = new THREE.Mesh(new THREE.BoxGeometry(6, 0.15, 1.2), wingMat);
+            hStab.position.set(0, 0.7, -6.5);
+            group.add(hStab);
+
+            // Vertical Stabilizer
+            const vStab = new THREE.Mesh(new THREE.BoxGeometry(0.15, 3, 2), wingMat);
+            vStab.position.set(0, 2, -6);
+            group.add(vStab);
+
+            // Blue Stripe
+            const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.5, 8), accentMat);
+            stripe.position.y = 1.5;
+            group.add(stripe);
+
+            // Propeller Hub
+            const propHub = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.6, 8), darkMat);
+            propHub.rotation.x = Math.PI / 2;
+            propHub.position.z = 7.3;
+            group.add(propHub);
+
+            // Propeller Blades (will rotate around Z)
+            const blade1 = new THREE.Mesh(new THREE.BoxGeometry(4, 0.4, 0.1), darkMat);
+            blade1.position.z = 7.5;
+            group.add(blade1);
+
+            const blade2 = new THREE.Mesh(new THREE.BoxGeometry(0.4, 4, 0.1), darkMat);
+            blade2.position.z = 7.5;
+            group.add(blade2);
+
+            group.userData.propeller = [blade1, blade2];
+            return group;
+        }
+
+        const cessna = createCessna();
+        cessna.scale.set(2, 2, 2);
+        scene.add(cessna);
+
+        // ============ INTRUDER ============
+        function createIntruder() {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshLambertMaterial({ color: 0xdc2626 });
+            const body = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 0.8, 12, 16), mat);
+            body.rotation.x = Math.PI / 2;
+            group.add(body);
+            const wing = new THREE.Mesh(new THREE.BoxGeometry(10, 0.3, 3), mat);
+            group.add(wing);
+            const vt = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.5, 2), mat);
+            vt.position.set(0, 1.5, -5);
+            group.add(vt);
+            return group;
+        }
+        const intruder = createIntruder();
+        intruder.scale.set(3, 3, 3);
+        intruder.visible = false;
+        scene.add(intruder);
+
+        // ============ PHYSICS ============
+        function updatePhysics(dt) {
+            const p = state.player;
+
+            // Controls
+            if (keys['ArrowUp']) p.pitch -= 0.6 * dt;
+            if (keys['ArrowDown']) p.pitch += 0.6 * dt;
+            if (keys['ArrowLeft']) p.roll += 1.2 * dt;
+            if (keys['ArrowRight']) p.roll -= 1.2 * dt;
+            if (keys['w'] || keys['W'] || keys['z'] || keys['Z']) p.throttle = Math.min(1, p.throttle + 0.3 * dt);
+            if (keys['s'] || keys['S']) p.throttle = Math.max(0.2, p.throttle - 0.3 * dt);
+
+            // Spacebar = Reset orientation
+            if (keys[' ']) {
+                p.pitch = 0;
+                p.roll = 0;
+                p.yaw = 0;
+            }
+
+            // Stabilization
+            if (!keys['ArrowLeft'] && !keys['ArrowRight']) p.roll *= 0.96;
+            if (!keys['ArrowUp'] && !keys['ArrowDown']) p.pitch *= 0.97;
+
+            // Clamp
+            p.pitch = Math.max(-0.5, Math.min(0.5, p.pitch));
+            p.roll = Math.max(-0.8, Math.min(0.8, p.roll));
+
+            // Speed
+            const speed = 60 + p.throttle * 50; // 60-110 m/s
+
+            // Vertical speed from pitch
+            const vs = -Math.sin(p.pitch) * speed;
+            p.vel.y = vs;
+            p.pos.y += vs * dt;
+            p.pos.y = Math.max(50, p.pos.y);
+
+            // Yaw from roll
+            p.yaw += Math.sin(p.roll) * 0.4 * dt;
+
+            // Forward motion
+            p.pos.z -= speed * dt;
+
+            // Update Cessna position and rotation
+            cessna.position.copy(p.pos);
+            cessna.rotation.set(p.pitch, p.yaw + Math.PI, p.roll); // +PI to show tail to camera
+
+            // Propeller animation
+            cessna.userData.propeller.forEach(blade => { blade.rotation.z += 40 * dt; });
+
+            // Intruder spawn
+            if (state.t > CFG.spawnTime && !state.intruder.active) {
+                state.intruder.active = true;
+                const ttHit = CFG.collisionTime - state.t;
+                const closure = 60 + 90;
+                state.intruder.pos.set(0, p.pos.y, p.pos.z - closure * ttHit);
+                intruder.visible = true;
+            }
+
+            // Intruder move
+            if (state.intruder.active) {
+                state.intruder.pos.z += (60 + 90) * dt;
+                intruder.position.copy(state.intruder.pos);
+            }
+
+            // Clouds illusion
+            clouds.forEach(c => {
+                c.position.z += speed * dt;
+                if (c.position.z > p.pos.z + 500) {
+                    c.position.z = p.pos.z - 20000 + Math.random() * 5000;
+                    c.position.x = (Math.random() - 0.5) * 15000;
+                }
+            });
+        }
+
+        // ============ CAMERA ============
+        function updateCamera() {
+            const p = state.player.pos;
+            const yawQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), state.player.yaw);
+            const offset = new THREE.Vector3(0, 6, 22); // Behind and above
+            offset.applyQuaternion(yawQ);
+            const target = p.clone().add(offset);
+            camera.position.lerp(target, 0.06);
+            const lookAt = p.clone();
+            lookAt.y += 1;
+            camera.lookAt(lookAt);
+        }
+
+        // ============ TCAS ============
+        function updateTCAS() {
+            if (!state.intruder.active) return;
+            const p = state.player.pos;
+            const i = state.intruder.pos;
+            const dist = p.distanceTo(i);
+            const tau = dist / 150;
+            const altDiff = i.y - p.y;
+
+            let level = 'NONE';
+            if (tau <= CFG.tauRA && Math.abs(altDiff) < 250) level = 'RA';
+            else if (tau <= CFG.tauTA && Math.abs(altDiff) < 400) level = 'TA';
+
+            if (level !== state.tcas.level) {
+                state.tcas.level = level;
+                triggerAlert(level, altDiff);
+            }
+            updateRadar(dist, level);
+        }
+
+        function triggerAlert(level, altDiff) {
+            const box = document.getElementById('alertBox');
+            const title = document.getElementById('alertTitle');
+            const sub = document.getElementById('alertSub');
+            const coord = document.getElementById('coordMsg');
+            box.className = 'glass';
+            box.classList.remove('show');
+            coord.classList.remove('show');
+            if (level === 'TA') {
+                box.classList.add('show', 'ta');
+                title.textContent = 'TRAFFIC';
+                sub.textContent = 'MONITOR';
+                speak('Traffic, traffic');
+            } else if (level === 'RA') {
+                box.classList.add('show', 'ra');
+                const cmd = altDiff >= 0 ? 'DESCEND' : 'CLIMB';
+                title.textContent = cmd;
+                sub.textContent = cmd + ' NOW';
+                coord.classList.add('show');
+                speak(cmd + ', ' + cmd);
+            }
+        }
+
+        function updateRadar(dist, level) {
+            const dot = document.getElementById('intruderDot');
+            const norm = Math.min(dist / 10000, 1);
+            if (dist < 10000) {
+                dot.style.display = 'block';
+                dot.style.top = (100 - norm * 80) + 'px';
+                dot.style.left = '100px';
+                dot.className = 'intruder-dot ' + level.toLowerCase();
+            } else { dot.style.display = 'none'; }
+        }
+
+        function speak(t) {
+            if ('speechSynthesis' in window) {
+                const u = new SpeechSynthesisUtterance(t);
+                u.rate = 1.1;
+                window.speechSynthesis.speak(u);
+            }
+        }
+
+        // ============ HUD ============
+        function updateHUD() {
+            const p = state.player;
+            document.getElementById('altVal').textContent = Math.round(p.pos.y * 3.28084);
+            document.getElementById('spdVal').textContent = Math.round((60 + p.throttle * 50) * 1.944);
+            const vsFpm = Math.round(p.vel.y * 196.85);
+            document.getElementById('vsVal').textContent = (vsFpm >= 0 ? '+' : '') + vsFpm;
+            // Throttle bar
+            const thrPct = Math.round(p.throttle * 100);
+            document.getElementById('throttleFill').style.height = thrPct + '%';
+            document.getElementById('throttleVal').textContent = thrPct + '%';
+        }
+
+        // ============ LOOP ============
+        function animate() {
+            requestAnimationFrame(animate);
+            const dt = 0.016;
+            state.t += dt;
+            updatePhysics(dt);
+            updateCamera();
+            updateTCAS();
+            updateHUD();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+
+</html>

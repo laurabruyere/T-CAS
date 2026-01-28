@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCAS Training Simulator PRO</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --cockpit-dark: #0d1117;
+            --panel-bg: #161b22;
+            --pfd-green: #00ff41;
+            --pfd-amber: #ffa500;
+            --pfd-red: #ff3333;
+            --pfd-cyan: #00d4ff;
+            --pfd-white: #e6edf3;
+            --pfd-magenta: #ff00ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--cockpit-dark);
+            color: var(--pfd-white);
+            height: 100vh;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* MAIN MENU */
+        #mainMenu {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0e14 0%, #1a1f2e 50%, #0a0e14 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .menu-logo {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .menu-logo h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 64px;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--pfd-cyan) 0%, var(--pfd-green) 50%, var(--pfd-cyan) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 60px rgba(0, 212, 255, 0.5);
+            letter-spacing: 8px;
+        }
+
+        .menu-logo p {
+            font-size: 12px;
+            color: var(--pfd-amber);
+            letter-spacing: 10px;
+            margin-top: 8px;
+        }
+
+        .menu-cards {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .menu-card {
+            background: linear-gradient(180deg, rgba(22, 27, 34, 0.9) 0%, rgba(13, 17, 23, 0.95) 100%);
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            border-radius: 14px;
+            padding: 30px;
+            width: 240px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card:hover {
+            border-color: var(--pfd-cyan);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 212, 255, 0.2);
+        }
+
+        .menu-card .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .menu-card.tutorial .icon {
+            color: var(--pfd-cyan);
+        }
+
+        .menu-card.simulation .icon {
+            color: var(--pfd-amber);
+        }
+
+        .menu-card.freefly .icon {
+            color: var(--pfd-green);
+        }
+
+        .menu-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 15px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .menu-card p {
+            font-size: 11px;
+            color: rgba(230, 237, 243, 0.6);
+            line-height: 1.5;
+        }
+
+        /* AIRCRAFT SELECTION */
+        #aircraftSelect {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0e14 0%, #15202b 50%, #0a0e14 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 950;
+        }
+
+        .select-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            color: var(--pfd-cyan);
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+        }
+
+        .aircraft-row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .aircraft-card {
+            background: rgba(22, 27, 34, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .aircraft-card:hover,
+        .aircraft-card.selected {
+            border-color: var(--pfd-cyan);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .aircraft-card.selected {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .aircraft-card .emoji {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .aircraft-card h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            color: var(--pfd-white);
+            margin-bottom: 5px;
+        }
+
+        .aircraft-card p {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .weather-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .weather-section label {
+            font-size: 12px;
+            color: var(--pfd-amber);
+            letter-spacing: 2px;
+        }
+
+        .weather-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .weather-btn {
+            background: rgba(22, 27, 34, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--pfd-white);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: 'Share Tech Mono', monospace;
+            transition: all 0.3s;
+        }
+
+        .weather-btn:hover,
+        .weather-btn.selected {
+            border-color: var(--pfd-green);
+            color: var(--pfd-green);
+        }
+
+        .weather-btn.selected {
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        .select-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            font-family: 'Orbitron', sans-serif;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .btn-primary {
+            background: var(--pfd-cyan);
+            color: var(--cockpit-dark);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #33e0ff;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--pfd-white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--pfd-white);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* TUTORIAL */
+        #tutorialOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            z-index: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial-box {
+            background: linear-gradient(180deg, #1a2332 0%, #0d1117 100%);
+            border: 2px solid var(--pfd-cyan);
+            border-radius: 18px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .tutorial-box h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: var(--pfd-cyan);
+            margin-bottom: 25px;
+            letter-spacing: 3px;
+        }
+
+        .tutorial-content {
+            text-align: left;
+            line-height: 1.7;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .tutorial-content strong {
+            color: var(--pfd-amber);
+        }
+
+        .tutorial-content em {
+            color: var(--pfd-green);
+            font-style: normal;
+        }
+
+        .tcas-demo {
+            background: rgba(0, 20, 40, 0.8);
+            border: 1px solid var(--pfd-cyan);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .tcas-symbols {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 12px;
+        }
+
+        .symbol-item {
+            text-align: center;
+        }
+
+        .symbol-item .sym {
+            width: 35px;
+            height: 35px;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .symbol-item .sym.diamond {
+            width: 20px;
+            height: 20px;
+            background: var(--pfd-white);
+            transform: rotate(45deg);
+        }
+
+        .symbol-item .sym.circle {
+            width: 20px;
+            height: 20px;
+            background: var(--pfd-amber);
+            border-radius: 50%;
+        }
+
+        .symbol-item .sym.square {
+            width: 20px;
+            height: 20px;
+            background: var(--pfd-red);
+        }
+
+        .symbol-item span {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tutorial-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tutorial-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tutorial-dots .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .tutorial-dots .dot.active {
+            background: var(--pfd-cyan);
+            box-shadow: 0 0 8px var(--pfd-cyan);
+        }
+
+        /* GAME UI */
+        #gameCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .cockpit-frame {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+            border: 6px solid #1a1a1a;
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.7);
+        }
+
+        /* PFD */
+        #pfd {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            width: 280px;
+            background: linear-gradient(180deg, #0a0f14 0%, #060a0d 100%);
+            border: 2px solid #2a2a2a;
+            border-radius: 6px;
+            overflow: hidden;
+            z-index: 100;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .pfd-header {
+            background: #111;
+            padding: 6px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .pfd-header span {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            color: var(--pfd-green);
+            letter-spacing: 2px;
+        }
+
+        .attitude-indicator {
+            height: 140px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, #1a4a7a 0%, #1a4a7a 50%, #5a3a1a 50%, #5a3a1a 100%);
+        }
+
+        .pitch-ladder {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.1s linear;
+        }
+
+        .aircraft-symbol {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .aircraft-symbol svg {
+            width: 70px;
+            height: 18px;
+        }
+
+        .pfd-data {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            padding: 6px;
+            background: #080a0c;
+        }
+
+        .data-cell {
+            background: #0d1117;
+            padding: 8px 4px;
+            text-align: center;
+            border: 1px solid #1a1a1a;
+        }
+
+        .data-cell .label {
+            font-size: 8px;
+            color: var(--pfd-cyan);
+            margin-bottom: 3px;
+        }
+
+        .data-cell .value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: var(--pfd-green);
+        }
+
+        .data-cell .unit {
+            font-size: 7px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* TCAS PANEL */
+        #tcasPanel {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            width: 240px;
+            background: linear-gradient(180deg, #0a0f14 0%, #060a0d 100%);
+            border: 2px solid #2a2a2a;
+            border-radius: 6px;
+            z-index: 100;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .tcas-header {
+            background: #111;
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .tcas-header h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--pfd-cyan);
+            letter-spacing: 2px;
+        }
+
+        .tcas-header .range {
+            font-size: 9px;
+            color: var(--pfd-green);
+        }
+
+        #tcasDisplay {
+            width: 100%;
+            aspect-ratio: 1;
+            background: radial-gradient(circle, #001020 0%, #000810 100%);
+        }
+
+        .tcas-legend {
+            display: flex;
+            justify-content: space-around;
+            padding: 6px;
+            background: #0a0a0a;
+            font-size: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .legend-item .sym {
+            width: 8px;
+            height: 8px;
+        }
+
+        .legend-item .sym.other {
+            background: #fff;
+            transform: rotate(45deg);
+            width: 6px;
+            height: 6px;
+        }
+
+        .legend-item .sym.ta {
+            background: var(--pfd-amber);
+            border-radius: 50%;
+        }
+
+        .legend-item .sym.ra {
+            background: var(--pfd-red);
+        }
+
+        /* ALERTS */
+        #tcasAlert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 500;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        #tcasAlert.ta .alert-text {
+            color: var(--pfd-amber);
+            text-shadow: 0 0 35px var(--pfd-amber);
+        }
+
+        #tcasAlert.ra .alert-text {
+            color: var(--pfd-red);
+            text-shadow: 0 0 50px var(--pfd-red);
+            animation: alertPulse 0.4s infinite;
+        }
+
+        .alert-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: 6px;
+        }
+
+        .alert-instruction {
+            font-size: 20px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        @keyframes alertPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.04);
+            }
+        }
+
+        #screenPulse {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 400;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        #screenPulse.ta {
+            opacity: 1;
+            box-shadow: inset 0 0 180px 50px rgba(255, 165, 0, 0.25);
+            animation: pulseTa 1s infinite;
+        }
+
+        #screenPulse.ra {
+            opacity: 1;
+            box-shadow: inset 0 0 220px 70px rgba(255, 51, 51, 0.35);
+            animation: pulseRa 0.5s infinite;
+        }
+
+        @keyframes pulseTa {
+
+            0%,
+            100% {
+                box-shadow: inset 0 0 130px 35px rgba(255, 165, 0, 0.2);
+            }
+
+            50% {
+                box-shadow: inset 0 0 200px 60px rgba(255, 165, 0, 0.35);
+            }
+        }
+
+        @keyframes pulseRa {
+
+            0%,
+            100% {
+                box-shadow: inset 0 0 170px 45px rgba(255, 51, 51, 0.25);
+            }
+
+            50% {
+                box-shadow: inset 0 0 260px 80px rgba(255, 51, 51, 0.45);
+            }
+        }
+
+        /* VS COMMAND */
+        #vsCommand {
+            position: fixed;
+            bottom: 180px;
+            right: 12px;
+            width: 70px;
+            background: rgba(10, 15, 20, 0.95);
+            border: 2px solid var(--pfd-red);
+            border-radius: 6px;
+            padding: 12px 8px;
+            text-align: center;
+            z-index: 150;
+        }
+
+        #vsCommand .label {
+            font-size: 9px;
+            color: var(--pfd-red);
+            margin-bottom: 6px;
+        }
+
+        #vsCommand .value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: var(--pfd-red);
+        }
+
+        .vs-bar {
+            width: 16px;
+            height: 80px;
+            background: #111;
+            border: 1px solid #333;
+            margin: 8px auto;
+            position: relative;
+        }
+
+        .vs-target {
+            position: absolute;
+            left: -4px;
+            right: -4px;
+            height: 3px;
+            background: var(--pfd-red);
+        }
+
+        .vs-current {
+            position: absolute;
+            left: -4px;
+            right: -4px;
+            height: 3px;
+            background: var(--pfd-green);
+        }
+
+        /* THROTTLE */
+        #throttlePanel {
+            position: fixed;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(10, 15, 20, 0.95);
+            border: 2px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 12px;
+            z-index: 100;
+        }
+
+        .throttle-label {
+            font-size: 9px;
+            color: var(--pfd-cyan);
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .throttle-track {
+            width: 25px;
+            height: 100px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 3px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .throttle-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, var(--pfd-green), var(--pfd-amber) 70%, var(--pfd-red));
+            border-radius: 0 0 2px 2px;
+            transition: height 0.1s;
+        }
+
+        .throttle-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--pfd-green);
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        /* CONTROLS & MISSION */
+        #controlsHelp {
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 15, 20, 0.85);
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 15px;
+            display: flex;
+            gap: 15px;
+            font-size: 10px;
+            z-index: 100;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .control-item kbd {
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--pfd-cyan);
+            font-size: 9px;
+        }
+
+        #missionInfo {
+            position: fixed;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(10, 15, 20, 0.95);
+            border: 2px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 12px 15px;
+            z-index: 100;
+            min-width: 180px;
+        }
+
+        #missionInfo .level {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--pfd-cyan);
+            margin-bottom: 4px;
+        }
+
+        #missionInfo .objective {
+            font-size: 11px;
+            color: var(--pfd-amber);
+        }
+
+        /* RESULT */
+        #resultScreen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 800;
+        }
+
+        #resultScreen.crash {
+            background: rgba(60, 0, 0, 0.95);
+        }
+
+        #resultScreen.success {
+            background: rgba(0, 40, 20, 0.95);
+        }
+
+        #resultScreen h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            margin-bottom: 18px;
+        }
+
+        #resultScreen.crash h2 {
+            color: var(--pfd-red);
+        }
+
+        #resultScreen.success h2 {
+            color: var(--pfd-green);
+        }
+
+        #resultScreen p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 35px;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 18px;
+        }
+
+        /* PAUSE */
+        #pauseScreen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 700;
+        }
+
+        #pauseScreen h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 64px;
+            color: var(--pfd-cyan);
+            letter-spacing: 15px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- MAIN MENU -->
+    <div id="mainMenu">
+        <div class="menu-logo">
+            <h1>TCAS PRO</h1>
+            <p>TRAFFIC COLLISION AVOIDANCE SIMULATOR</p>
+        </div>
+        <div class="menu-cards">
+            <div class="menu-card tutorial" onclick="startTutorial()">
+                <div class="icon">📚</div>
+                <h3>TUTORIEL</h3>
+                <p>Apprenez le fonctionnement du TCAS et les réactions aux alertes</p>
+            </div>
+            <div class="menu-card simulation" onclick="showAircraftSelection('simulation')">
+                <div class="icon">🎯</div>
+                <h3>SIMULATION</h3>
+                <p>5 niveaux de difficulté progressive avec scénarios réalistes</p>
+            </div>
+            <div class="menu-card freefly" onclick="showAircraftSelection('sandbox')">
+                <div class="icon">✈️</div>
+                <h3>VOL LIBRE</h3>
+                <p>Explorez le ciel avec trafic aléatoire et conditions météo</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AIRCRAFT SELECTION -->
+    <div id="aircraftSelect" class="hidden">
+        <h2 class="select-title">SÉLECTION DE L'AVION</h2>
+        <div class="aircraft-row">
+            <div class="aircraft-card selected" data-aircraft="c172" onclick="selectAircraft('c172')">
+                <div class="emoji">🛩️</div>
+                <h4>CESSNA 172</h4>
+                <p>Aviation générale<br>Stable, idéal pour débuter</p>
+            </div>
+            <div class="aircraft-card" data-aircraft="f16" onclick="selectAircraft('f16')">
+                <div class="emoji">🔫</div>
+                <h4>F-16 FALCON</h4>
+                <p>Chasseur supersonique<br>Très maniable, rapide</p>
+            </div>
+            <div class="aircraft-card" data-aircraft="c130" onclick="selectAircraft('c130')">
+                <div class="emoji">🛬</div>
+                <h4>C-130 HERCULES</h4>
+                <p>Transport militaire<br>Lourd, inertie importante</p>
+            </div>
+        </div>
+        <div class="weather-section">
+            <label>CONDITIONS MÉTÉO</label>
+            <div class="weather-row">
+                <button class="weather-btn" data-weather="cavok" onclick="selectWeather('cavok')">☀️ CAVOK</button>
+                <button class="weather-btn selected" data-weather="vfr" onclick="selectWeather('vfr')">⛅ VFR</button>
+                <button class="weather-btn" data-weather="windy" onclick="selectWeather('windy')">💨 VENT</button>
+                <button class="weather-btn" data-weather="overcast" onclick="selectWeather('overcast')">☁️
+                    COUVERT</button>
+                <button class="weather-btn" data-weather="storm" onclick="selectWeather('storm')">⛈️ ORAGE</button>
+            </div>
+        </div>
+        <div class="select-buttons">
+            <button class="btn btn-secondary" onclick="backFromSelection()">← RETOUR</button>
+            <button class="btn btn-primary" onclick="confirmSelection()">DÉMARRER →</button>
+        </div>
+    </div>
+
+    <!-- TUTORIAL -->
+    <div id="tutorialOverlay" class="hidden">
+        <div class="tutorial-box">
+            <h2 id="tutorialTitle">BIENVENUE</h2>
+            <div class="tutorial-content" id="tutorialContent"></div>
+            <div class="tutorial-nav">
+                <button class="btn btn-secondary" onclick="prevTutorial()">← Précédent</button>
+                <div class="tutorial-dots" id="tutorialDots"></div>
+                <button class="btn btn-primary" onclick="nextTutorial()">Suivant →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME -->
+    <canvas id="gameCanvas"></canvas>
+    <div class="cockpit-frame hidden" id="cockpitFrame"></div>
+
+    <!-- PFD -->
+    <div id="pfd" class="hidden">
+        <div class="pfd-header"><span>PRIMARY FLIGHT DISPLAY</span></div>
+        <div class="attitude-indicator" id="attitudeIndicator">
+            <div class="pitch-ladder" id="pitchLadder"></div>
+            <div class="aircraft-symbol">
+                <svg viewBox="0 0 70 18">
+                    <path d="M0 9 L22 9 M35 9 L48 9 M70 9 L48 9" stroke="#ffa500" stroke-width="3" fill="none" />
+                    <circle cx="35" cy="9" r="4" fill="none" stroke="#ffa500" stroke-width="2" />
+                </svg>
+            </div>
+        </div>
+        <div class="pfd-data">
+            <div class="data-cell">
+                <div class="label">ALT</div>
+                <div class="value" id="altValue">3000</div>
+                <div class="unit">FT</div>
+            </div>
+            <div class="data-cell">
+                <div class="label">IAS</div>
+                <div class="value" id="iasValue">120</div>
+                <div class="unit">KTS</div>
+            </div>
+            <div class="data-cell">
+                <div class="label">HDG</div>
+                <div class="value" id="hdgValue">360</div>
+                <div class="unit">°</div>
+            </div>
+            <div class="data-cell">
+                <div class="label">VS</div>
+                <div class="value" id="vsValue">0</div>
+                <div class="unit">FPM</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TCAS -->
+    <div id="tcasPanel" class="hidden">
+        <div class="tcas-header">
+            <h4>TCAS</h4><span class="range">10 NM</span>
+        </div>
+        <canvas id="tcasDisplay" width="240" height="240"></canvas>
+        <div class="tcas-legend">
+            <div class="legend-item">
+                <div class="sym other"></div><span>OTHER</span>
+            </div>
+            <div class="legend-item">
+                <div class="sym ta"></div><span>TA</span>
+            </div>
+            <div class="legend-item">
+                <div class="sym ra"></div><span>RA</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div id="tcasAlert" class="hidden">
+        <div class="alert-text" id="alertText">TRAFFIC</div>
+        <div class="alert-instruction" id="alertInstruction"></div>
+    </div>
+    <div id="screenPulse"></div>
+    <div id="vsCommand" class="hidden">
+        <div class="label">TARGET VS</div>
+        <div class="value" id="targetVs">+1500</div>
+        <div class="vs-bar">
+            <div class="vs-target" id="vsTarget" style="top: 25%"></div>
+            <div class="vs-current" id="vsCurrent" style="top: 50%"></div>
+        </div>
+    </div>
+
+    <!-- THROTTLE -->
+    <div id="throttlePanel" class="hidden">
+        <div class="throttle-label">THROTTLE</div>
+        <div class="throttle-track">
+            <div class="throttle-fill" id="throttleFill" style="height: 60%"></div>
+        </div>
+        <div class="throttle-value" id="throttleValue">60%</div>
+    </div>
+
+    <!-- CONTROLS & MISSION -->
+    <div id="controlsHelp" class="hidden">
+        <div class="control-item"><kbd>↑</kbd><kbd>↓</kbd> Pitch</div>
+        <div class="control-item"><kbd>←</kbd><kbd>→</kbd> Roll</div>
+        <div class="control-item"><kbd>W</kbd><kbd>S</kbd> Throttle</div>
+        <div class="control-item"><kbd>ESC</kbd> Pause</div>
+    </div>
+    <div id="missionInfo" class="hidden">
+        <div class="level" id="missionLevel">NIVEAU 1</div>
+        <div class="objective" id="missionObjective">Objectif</div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultScreen" class="hidden">
+        <h2 id="resultTitle">RÉSULTAT</h2>
+        <p id="resultMessage">Message</p>
+        <div class="result-buttons">
+            <button class="btn btn-primary" onclick="retryGame()">RÉESSAYER</button>
+            <button class="btn btn-secondary" onclick="backToMenu()">MENU</button>
+        </div>
+    </div>
+
+    <!-- PAUSE -->
+    <div id="pauseScreen" class="hidden">
+        <h2>PAUSE</h2>
+        <button class="btn btn-primary" onclick="resumeGame()">REPRENDRE</button>
+        <button class="btn btn-secondary" style="margin-top:12px" onclick="backToMenu()">MENU</button>
+    </div>
+
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="js/aircraft-data.js"></script>
+    <script src="js/aircraft-models.js"></script>
+    <script src="js/environment.js"></script>
+    <script src="js/physics-engine.js"></script>
+    <script src="js/main-simulator.js"></script>
+</body>
+
+</html>

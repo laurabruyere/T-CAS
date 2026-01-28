@@ -44,6 +44,54 @@ html {
     font-family: monospace;
 }
 
+/* --- BOUTON DE LANCEMENT --- */
+.launch-button {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 40px;
+    background: linear-gradient(135deg, var(--tech-blue), #1d4ed8);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+}
+
+.launch-button:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 48px rgba(59, 130, 246, 0.6);
+    background: linear-gradient(135deg, #60a5fa, var(--tech-blue));
+}
+
+.launch-button:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.button-icon {
+    font-size: 2rem;
+}
+
+.button-text {
+    flex: 1;
+}
+
+.button-arrow {
+    font-size: 1.8rem;
+    transition: transform 0.3s ease;
+}
+
+.launch-button:hover .button-arrow {
+    transform: translateX(8px);
+}
+
 /* --- STYLE MATHÉMATIQUE (LATEX) --- */
 .math-block {
     background: rgba(15, 23, 42, 0.5);
