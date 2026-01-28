@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours T-CAS : La sécurité en vol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="home.css">
+    <style>
+        /* --- CORRECTIF SPÉCIAL PAGE COURS --- */
+        body, html {
+            overflow-y: auto !important; /* On libère le scroll */
+            height: auto !important;     /* On laisse la page grandir selon le texte */
+            background-color: #0f172a;   /* Ton bleu profond */
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        #main-site {
+            opacity: 1 !important; /* On affiche directement le site */
+            display: block !important;
+            padding-bottom: 100px;
+        }
+
+        .course-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .lesson-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 80px;
+            align-items: center;
+        }
+
+        /* On utilise le nom de classe présent dans ton HTML */
+        .img-placeholder {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.5); /* Un fond léger pour le style */
+            border: 2px dashed #3b82f6;
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .img-placeholder img {
+            width: 100%;      /* L'image prend toute la largeur de sa colonne */
+            height: auto;     /* Garde les proportions */
+            max-height: 300px; /* Évite que l'image soit trop haute */
+            object-fit: cover; /* Recadre proprement si besoin */
+            border-radius: 15px;
+        }
+
+        /* On force le style de tes titres ici pour être sûr */
+        h2 { color: var(--tech-blue); font-weight: 800; font-size: 1.8rem; }
+        p { color: #94a3b8; line-height: 1.6; font-size: 1.1rem; }
+
+        @media (max-width: 768px) {
+            .lesson-step { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-site">
+        <header>
+            <div class="title">COURS T-CAS : NIVEAU DÉBUTANT</div>
+            <nav>
+                <a href="home.html">ACCUEIL</a>
+                <a href="histoire.html" class="active">HISTOIRE</a>
+                <a href="technologie.html" style="color: var(--tech-blue)">TECHNOLOGIE</a>
+                <a href="jeu.html">SIMULATEUR</a>
+                <a href="apropos.html">À PROPOS</a>
+            </nav>
+        </header>
+
+        <div class="course-container">
+            
+            <div class="definition-box">
+                <h2>C'est quoi le T-CAS ?</h2>
+                <p>C'est comme un <strong>bouclier invisible</strong> autour de l'avion. Si un autre avion s'approche trop, le T-CAS prévient le pilote pour éviter qu'ils se touchent.</p>
+            </div>
+
+            <div class="lesson-step">
+                <div class="img-placeholder"> 
+                    <img src="c:\Users\memer\Downloads\TCAS.webp" alt="Cerveau du TCAS"> 
+                    <p style="color: var(--tech-blue); font-size: 0.8rem; margin-top: 10px;">Le "Cerveau" de l'avion (Calculateur)</p> 
+                </div>
+
+                <div class="vulg-text">
+                    <h2>1. À quoi ça ressemble ?</h2>
+                    <p>Dans l'avion, c'est une <strong>boîte métallique</strong>. Elle est cachée dans une soute spéciale sous les pieds des pilotes. C'est elle qui réfléchit très vite pour calculer le danger.</p>
+                </div>
+            </div>
+
+            <div class="lesson-step" style="direction: rtl;">
+                <div class="img-placeholder"> 
+                    <img src="c:\Users\memer\Downloads\unnamed.jpg" alt="Où sont les antennes ?"> 
+                    <p style="color: var(--tech-blue); font-size: 0.8rem; margin-top: 10px;">Le "Cerveau" de l'avion (Calculateur)</p> 
+                </div>
+                <div class="vulg-text" style="direction: ltr;">
+                    <h2>2. Ses yeux et ses oreilles</h2>
+                    <p>L'avion a des <strong>antennes</strong> sur son dos et sous son ventre. Elles permettent de "parler" aux autres avions et de savoir exactement où ils se cachent.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <h2>3. Les 3 zones de sécurité</h2>
+                <p>Voici comment le T-CAS surveille le ciel :</p>
+                
+                <div class="radar-view" style="margin: 40px auto;">
+                    <div class="own-ship-radar"></div>
+                    <div class="zone zone-ta">
+                        <div class="msg">"Traffic, Traffic"</div>
+                        <div class="label" style="color:#b48b02">Zone Jaune : Attention</div>
+                    </div>
+                    <div class="zone zone-ra">
+                        <div class="msg">"Climb ! Climb !"</div>
+                        <div class="label" style="color:#c2410c">Zone Orange : Danger</div>
+                    </div>
+                    <div class="zone zone-collision">
+                        <div class="msg">CRITIQUE</div>
+                        <div class="label" style="color:#b91c1c; padding-bottom:10px;">Collision</div>
+                    </div>
+                </div>
+
+                <a href="jeu.html" class="btn-tech">PASSER AU SIMULATEUR →</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
