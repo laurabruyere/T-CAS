@@ -121,7 +121,6 @@ const resultFail = document.getElementById('result-fail');
 const resultSuccess = document.getElementById('result-success');
 const scoreFail = document.getElementById('score-fail');
 const studentNameFinal = document.getElementById('student-name-final');
-const certDate = document.getElementById('cert-date');
 
 // === INITIALIZATION ===
 document.addEventListener('DOMContentLoaded', () => {
@@ -241,15 +240,8 @@ function showResults() {
         resultFail.style.display = 'none';
         resultSuccess.style.display = 'flex';
 
-        // Remplir le diplôme avec nom et date
+        // Afficher le nom de l'élève
         studentNameFinal.textContent = `${userName.prenom} ${userName.nom}`;
-
-        // Format date JJ/MM/AAAA
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const year = today.getFullYear();
-        certDate.textContent = `${day}/${month}/${year}`;
     } else {
         resultSuccess.style.display = 'none';
         resultFail.style.display = 'block';
@@ -263,51 +255,4 @@ function restartQuiz() {
     score = 0;
     showStep('registration');
     registrationForm.reset();
-}
-
-// === PDF DOWNLOAD ===
-async function downloadDiploma() {
-    const diploma = document.getElementById('diploma');
-    const { jsPDF } = window.jspdf;
-
-    try {
-        // Capture diploma as image
-        const canvas = await html2canvas(diploma, {
-            scale: 2,
-            backgroundColor: '#1a1a2e',
-            logging: false
-        });
-
-        // Create PDF
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-            orientation: 'landscape',
-            unit: 'mm',
-            format: 'a4'
-        });
-
-        // Calculate dimensions to fit A4 landscape
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-        const finalWidth = imgWidth * ratio;
-        const finalHeight = imgHeight * ratio;
-        const x = (pdfWidth - finalWidth) / 2;
-        const y = (pdfHeight - finalHeight) / 2;
-
-        // Add dark background
-        pdf.setFillColor(15, 23, 42);
-        pdf.rect(0, 0, pdfWidth, pdfHeight, 'F');
-
-        // Add image
-        pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
-
-        // Save
-        pdf.save(`Certificat_TCAS_${userName.prenom}_${userName.nom}.pdf`);
-    } catch (error) {
-        console.error('Error generating PDF:', error);
-        alert('Erreur lors de la génération du PDF. Veuillez réessayer.');
-    }
 }
